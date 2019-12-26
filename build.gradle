@@ -34,6 +34,10 @@ dependencies {
     //implementation("org.springframework.boot:spring-boot-starter-cache")
 
 
+    // Tools
+    implementation('io.micrometer:micrometer-registry-prometheus')
+
+
     // DevTools
     runtimeOnly('org.springframework.boot:spring-boot-devtools')
     kapt('org.springframework.boot:spring-boot-configuration-processor')
