@@ -38,6 +38,10 @@ package-docker:
   stage: package
   variables:
     IMAGE_VERSION: latest
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - docker:dind
   script:
     - docker build -t $IMAGE_NAME:$IMAGE_VERSION .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
