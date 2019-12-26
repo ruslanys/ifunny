@@ -33,6 +33,10 @@ build-jar:
       - .gradle/caches
 
 
+
+###########################
+# Packaging
+###########################
 package-docker:
   image: docker:dind
   stage: package
@@ -42,7 +46,12 @@ package-docker:
     DOCKER_HOST: tcp://docker:2375
   services:
     - docker:dind
+  before_script:
+    - if [[ ${CI_COMMIT_REF_NAME} == master ]]; then export IMAGE_TAG=latest; else export IMAGE_TAG=${CI_COMMIT_REF_NAME}; fi;
   script:
-    - docker build -t $IMAGE_NAME:$IMAGE_VERSION .
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
-    - docker push $IMAGE_NAME:$IMAGE_VERSION
+    - docker push $IMAGE_NAME:$IMAGE_TAG
+  only:
+    - master
+    - tags
