@@ -34,7 +34,7 @@ build-jar:
 
 
 package-docker:
-  image: docker:latest
+  image: docker:dind
   stage: package
   variables:
     IMAGE_VERSION: latest
