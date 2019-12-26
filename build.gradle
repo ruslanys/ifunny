@@ -1,0 +1,118 @@
+plugins {
+    id 'jacoco'
+    id 'idea'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.61'
+    id 'org.jetbrains.kotlin.kapt' version '1.3.61'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.3.61'
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'me.ruslanys.ifunny'
+version = '0.1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation('com.fasterxml.jackson.module:jackson-module-kotlin')
+
+
+    // Spring
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation('org.springframework.boot:spring-boot-starter-freemarker')
+    //implementation("org.springframework.boot:spring-boot-starter-cache")
+
+
+    // DevTools
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    kapt('org.springframework.boot:spring-boot-configuration-processor')
+
+
+    // Tests
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/kotlin'
+    test.kotlin.srcDirs += 'src/test/kotlin'
+}
+
+// Jar
+jar {
+    manifest {
+        attributes("Implementation-Version": archiveVersion)
+    }
+    archiveFileName = rootProject.name + ".jar"
+}
+
+// Kotlin
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+
+// Tests
+test {
+    useJUnitPlatform()
+
+    if (project.hasProperty('maxParallelForks')) {
+        maxParallelForks = project.maxParallelForks as int
+    }
+    if (project.hasProperty('forkEvery')) {
+        forkEvery = project.forkEvery as int
+    }
+}
+jacoco {
+    toolVersion = "0.8.3"
+}
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    /*
+    afterEvaluate {
+        classDirectories.from = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    'me/ruslanys/jablog/*Application*',
+                    'me/ruslanys/jablog/domain/**',
+                    'me/ruslanys/jablog/model/**',
+                    'me/ruslanys/jablog/exception/**',
+                    'me/ruslanys/jablog/config/**'
+            ])
+        })
+    }
+    */
+}
+check.dependsOn jacocoTestReport
+
+// IDEA
+idea {
+    module {
+        def kaptMain = file('build/generated/source/kapt/main')
+        sourceDirs += kaptMain
+        generatedSourceDirs += kaptMain
+    }
+}
