@@ -14,3 +14,7 @@ P.S. Предпочитаю термин `Crawler` термину `Spider`. На
 // TODO
 
 // .env.example
+
+## Реализация
+
+### Kotlin DSL
