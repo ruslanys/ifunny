@@ -1,8 +1,3 @@
-image: docker:latest
-services:
-  - docker:dind
-
-
 stages:
   - build
   - package
@@ -39,6 +34,7 @@ build-jar:
 
 
 package-docker:
+  image: docker:latest
   stage: package
   variables:
     IMAGE_VERSION: latest
@@ -46,5 +42,3 @@ package-docker:
     - docker build -t $IMAGE_NAME:$IMAGE_VERSION .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker push $IMAGE_NAME:$IMAGE_VERSION
-  only:
-    - master
