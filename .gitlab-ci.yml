@@ -15,6 +15,13 @@ variables:
 build-jar:
   stage: build
   image: openjdk:11-oracle
+  variables:
+    MONGODB_HOST: mongo
+    MONGO_INITDB_ROOT_USERNAME: ifunny
+    MONGO_INITDB_ROOT_PASSWORD: ifunny
+  services:
+    - name: mongo
+      alias: $MONGODB_HOST
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
   script:
