@@ -16,7 +16,7 @@ build-jar:
   stage: build
   image: openjdk:11-oracle
   variables:
-    MONGO_HOST: mongo
+    MONGODB_HOST: mongo
     MONGO_INITDB_ROOT_USERNAME: ifunny
     MONGO_INITDB_ROOT_PASSWORD: ifunny
   services:
