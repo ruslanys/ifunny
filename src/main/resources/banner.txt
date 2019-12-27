@@ -1,0 +1,1 @@
+  ${AnsiBackground.YELLOW}${AnsiColor.BRIGHT_WHITE}${AnsiStyle.BOLD}     :: iFunny${application.formatted-version} ::     ${AnsiStyle.NORMAL}
