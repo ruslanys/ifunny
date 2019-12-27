@@ -19,12 +19,12 @@ P.S. Предпочитаю термин `Crawler` термину `Spider`. На
 
 #### MongoDB
 
-* `MONGO_HOST` – Хост сервера MongoDB (По умолчанию `localhost`).
-* `MONGO_PORT` – Порт сервера MongoDB (По умолчанию `27017`)
-* `MONGO_DATABASE` - Имя базы данных MongoDB (По умолчанию `ifunny`).
-* `MONGO_USERNAME` – Имя пользователя MongoDB (По умолчанию `ifunny`).
-* `MONGO_PASSWORD` – Пароль пользователя MongoDB (По умолчанию `ifunny`).
-* `MONGO_AUTH_DB` – База данных аутентификации MongoDB (По умолчанию `admin`).
+* `MONGODB_HOST` – Хост сервера MongoDB (По умолчанию `localhost`).
+* `MONGODB_PORT` – Порт сервера MongoDB (По умолчанию `27017`)
+* `MONGODB_DATABASE` - Имя базы данных MongoDB (По умолчанию `ifunny`).
+* `MONGODB_USERNAME` – Имя пользователя MongoDB (По умолчанию `ifunny`).
+* `MONGODB_PASSWORD` – Пароль пользователя MongoDB (По умолчанию `ifunny`).
+* `MONGODB_AUTH_DB` – База данных аутентификации MongoDB (По умолчанию `admin`).
 
 ### Локальное окружение
 
