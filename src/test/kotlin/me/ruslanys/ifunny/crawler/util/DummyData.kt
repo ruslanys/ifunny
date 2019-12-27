@@ -12,7 +12,7 @@ fun createDummyMeme(
         pageUrl: String = UUID.randomUUID().toString(),
         title: String = "Title",
         resourceUrl: String = "resourceUrl",
-        publishDateTime: LocalDateTime = LocalDateTime.now(),
+        publishDateTime: LocalDateTime? = LocalDateTime.now(),
         author: String = "ruslanys",
         likes: Int = ThreadLocalRandom.current().nextInt(1, 100),
         comments: Int = ThreadLocalRandom.current().nextInt(1, 100)

@@ -17,7 +17,7 @@ data class Meme(
         val pageUrl: String,
         val title: String,
 
-        var resourceUrl: String,
+        val resourceUrl: String,
 
         val publishDateTime: LocalDateTime? = null,
         val author: String? = null,
@@ -25,6 +25,6 @@ data class Meme(
         val comments: Int? = null,
 
         @MongoId
-        var id: ObjectId = ObjectId()
+        val id: ObjectId = ObjectId()
 
 )
