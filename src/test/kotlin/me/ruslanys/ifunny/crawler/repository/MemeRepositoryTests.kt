@@ -5,6 +5,7 @@ import me.ruslanys.ifunny.crawler.domain.Language
 import me.ruslanys.ifunny.crawler.domain.Meme
 import me.ruslanys.ifunny.crawler.util.createDummyMeme
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -20,6 +21,11 @@ class MemeRepositoryTests : RepositoryTests() {
     @Autowired
     private lateinit var repository: MemeRepository
 
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+        repository.deleteAll()
+    }
 
     @Test
     fun persistTest() {
@@ -65,8 +71,6 @@ class MemeRepositoryTests : RepositoryTests() {
     """)
     @Test
     fun sortByDateTest() {
-        repository.deleteAll()
-
         val firstMeme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 1, 10, 0)))
         val secondMeme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 2, 10, 0)))
         val thirdMeme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 3, 10, 0)))

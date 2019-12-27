@@ -21,7 +21,7 @@ abstract class RepositoryTests {
 
 
     @BeforeEach
-    fun setUp() {
+    open fun setUp() {
         val indexCreator = MongoIndexCreator(mongoConverter, mongoTemplate)
         indexCreator.initIndicesAfterStartup()
     }
