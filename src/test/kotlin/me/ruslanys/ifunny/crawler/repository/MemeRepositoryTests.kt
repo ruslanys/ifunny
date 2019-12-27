@@ -26,7 +26,7 @@ class MemeRepositoryTests : RepositoryTests() {
 
         // --
         assertThat(memeFromDb).isNotNull
-        assertThat(meme).isEqualTo(memeFromDb)
+        assertThat(memeFromDb).isEqualTo(meme)
     }
 
     @Test
