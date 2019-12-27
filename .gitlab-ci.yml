@@ -21,7 +21,7 @@ build-jar:
     MONGO_INITDB_ROOT_PASSWORD: ifunny
   services:
     - name: mongo
-      alias: $MONGO_HOST
+      alias: $MONGODB_HOST
   before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
   script:
