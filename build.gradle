@@ -60,11 +60,10 @@ sourceSets {
 }
 
 // Jar
-jar {
+bootJar {
     manifest {
         attributes("Implementation-Version": archiveVersion)
     }
-    archiveFileName = rootProject.name + ".jar"
 }
 
 // Kotlin
