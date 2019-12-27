@@ -50,4 +50,30 @@ class FunpotSourceTests {
         assertThat(list).hasSize(0)
     }
 
+    @Test
+    fun parseVideoPage() {
+        val baseInfo = MemeInfo(
+                pageUrl = "https://funpot.net/?id=funpot0000454085&tagid=55&dateityp=",
+                title = "Wo ist er?",
+                publishDateTime = LocalDateTime.of(2019, 12, 26, 18, 13),
+                likes = 2,
+                author = "Oweiowei"
+        )
+        val html = javaClass.getResourceAsStream("funpot/page_video.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val info = source.parsePageMeme(baseInfo, html)
+
+        // --
+        assertThat(info.pageUrl).isEqualTo(baseInfo.pageUrl)
+        assertThat(info.title).isEqualTo(baseInfo.title)
+        assertThat(info.likes).isEqualTo(baseInfo.likes)
+        assertThat(info.author).isEqualTo(baseInfo.author)
+        assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
+
+        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/daten/key_xyz/03/funpot0000454085_MB.mp4")
+    }
+
 }

@@ -91,7 +91,34 @@ class FunpotSource : Source(Language.GERMAN, "https://funpot.net") {
     }
 
     override fun parsePageMeme(info: MemeInfo, body: String): MemeInfo {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
+        val container = document.getElementById("content")
+
+        // --
+        val pictureUrl = parsePictureUrl(container)
+        val videoUrl = parseVideoUrl(container)
+
+        // --
+        return MemeInfo(
+                pageUrl = info.pageUrl,
+                title = info.title,
+                likes = info.likes,
+                comments = info.comments,
+                author = info.author,
+                publishDateTime = info.publishDateTime,
+                resourceUrl = pictureUrl ?: videoUrl
+        )
+    }
+
+    private fun parsePictureUrl(container: Element): String? {
+        return null
+    }
+
+    private fun parseVideoUrl(container: Element): String? {
+        return container.getElementById("robe_player")
+                ?.getElementsByTag("video")?.first()
+                ?.getElementsByTag("source")?.first()
+                ?.absUrl("src")
     }
 
     companion object {
