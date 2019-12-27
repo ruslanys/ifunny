@@ -21,7 +21,7 @@ class DebesteSourceTests {
     }
 
     @Test
-    fun parseProperListShouldReturnList() {
+    fun parseProperListPageShouldReturnList() {
         val html = javaClass.getResourceAsStream("debeste/list.html").bufferedReader().use {
             it.readText()
         }
@@ -38,7 +38,7 @@ class DebesteSourceTests {
     }
 
     @Test
-    fun parseInvalidListShouldReturnEmptyList() {
+    fun parseInvalidListPageShouldReturnEmptyList() {
         // --
         val list = source.parsePageList("<html></html>")
 

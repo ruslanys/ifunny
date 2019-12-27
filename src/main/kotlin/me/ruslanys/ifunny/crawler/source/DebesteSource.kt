@@ -15,11 +15,11 @@ class DebesteSource : Source(Language.GERMAN, "http://debeste.de") {
 
     override fun parsePageList(body: String): List<MemeInfo> {
         val document = Jsoup.parse(body)
-        val elements = document.getElementsByClass("box")
+        val boxes = document.getElementsByClass("box")
 
         val list = arrayListOf<MemeInfo>()
 
-        for (box in elements) {
+        for (box in boxes) {
             // Header
             val header = parseHeader(box)
             val url = header.first
