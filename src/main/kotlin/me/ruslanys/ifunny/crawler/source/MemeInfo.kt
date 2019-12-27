@@ -11,4 +11,3 @@ data class MemeInfo(
         val comments: Int? = null,
         val author: String? = null
 )
-
