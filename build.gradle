@@ -18,6 +18,10 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    jsoupVersion = '1.12.1'
+}
+
 dependencies {
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -35,6 +39,7 @@ dependencies {
 
 
     // Tools
+    implementation("org.jsoup:jsoup:$jsoupVersion")
     implementation('io.micrometer:micrometer-registry-prometheus')
 
 
