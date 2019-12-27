@@ -51,6 +51,57 @@ class FunpotSourceTests {
     }
 
     @Test
+    fun parsePicturePage() {
+        val baseInfo = MemeInfo(
+                pageUrl = "https://funpot.net/?id=funpot0000454125&tagid=55&dateityp=",
+                title = "Helmut Kohl kommt in die Hölle",
+                publishDateTime = LocalDateTime.of(2019, 12, 26, 20, 43),
+                likes = 2,
+                author = "Fossy"
+        )
+        val html = javaClass.getResourceAsStream("funpot/page_picture.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val info = source.parsePageMeme(baseInfo, html)
+
+        // --
+        assertThat(info.pageUrl).isEqualTo(baseInfo.pageUrl)
+        assertThat(info.title).isEqualTo(baseInfo.title)
+        assertThat(info.likes).isEqualTo(baseInfo.likes)
+        assertThat(info.author).isEqualTo(baseInfo.author)
+        assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
+
+        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/direktdownload/funpot125317829cbb65706700004545001keyzc4451y_x6c2/Helmut_Kohl_kommt_in_die_Hoelle.jpg")
+    }
+
+    @Test
+    fun parseGifPage() {
+        val baseInfo = MemeInfo(
+                pageUrl = "https://funpot.net/?id=funpot0000454131&tagid=55&dateityp=",
+                title = "Sportlich 291",
+                publishDateTime = LocalDateTime.of(2019, 12, 26, 20, 51),
+                likes = 0
+        )
+        val html = javaClass.getResourceAsStream("funpot/page_gif.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val info = source.parsePageMeme(baseInfo, html)
+
+        // --
+        assertThat(info.pageUrl).isEqualTo(baseInfo.pageUrl)
+        assertThat(info.title).isEqualTo(baseInfo.title)
+        assertThat(info.likes).isEqualTo(baseInfo.likes)
+        assertThat(info.author).isEqualTo(baseInfo.author)
+        assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
+
+        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/direktdownload/funpot1312307933d068623100004548606keyz72451y_x4ba/Sportlich_291.gif")
+    }
+
+    @Test
     fun parseVideoPage() {
         val baseInfo = MemeInfo(
                 pageUrl = "https://funpot.net/?id=funpot0000454085&tagid=55&dateityp=",
@@ -73,7 +124,7 @@ class FunpotSourceTests {
         assertThat(info.author).isEqualTo(baseInfo.author)
         assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
 
-        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/daten/key_xyz/03/funpot0000454085_MB.mp4")
+        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/direktdownload/funpot085Vid868a36eo-qua0000454liMBkeyz03451y_x9cf/Wo_ist_er_.mp4")
     }
 
 }

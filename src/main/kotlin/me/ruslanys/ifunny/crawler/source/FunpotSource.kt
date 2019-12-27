@@ -95,30 +95,21 @@ class FunpotSource : Source(Language.GERMAN, "https://funpot.net") {
         val container = document.getElementById("content")
 
         // --
-        val pictureUrl = parsePictureUrl(container)
-        val videoUrl = parseVideoUrl(container)
+        val resourceUrl = parseResourceUrl(container)
 
         // --
         return MemeInfo(
                 pageUrl = info.pageUrl,
+                resourceUrl = resourceUrl,
                 title = info.title,
                 likes = info.likes,
-                comments = info.comments,
                 author = info.author,
-                publishDateTime = info.publishDateTime,
-                resourceUrl = pictureUrl ?: videoUrl
+                publishDateTime = info.publishDateTime
         )
     }
 
-    private fun parsePictureUrl(container: Element): String? {
-        return null
-    }
-
-    private fun parseVideoUrl(container: Element): String? {
-        return container.getElementById("robe_player")
-                ?.getElementsByTag("video")?.first()
-                ?.getElementsByTag("source")?.first()
-                ?.absUrl("src")
+    private fun parseResourceUrl(container: Element): String {
+        return container.getElementById("Direktdownload").absUrl("href")
     }
 
     companion object {
