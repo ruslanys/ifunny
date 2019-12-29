@@ -21,7 +21,7 @@ class FunpotSource : Source(Language.GERMAN, "https://funpot.net") {
         for (box in boxes) {
             // Type
             val type = parseType(box)
-            if (!type.startsWith("Bild") && !type.startsWith("Online-Video")) {
+            if (type == null || !type.startsWith("Bild") && !type.startsWith("Online-Video")) {
                 continue // skip non-image and non-video content
             }
 
@@ -53,9 +53,8 @@ class FunpotSource : Source(Language.GERMAN, "https://funpot.net") {
         return list
     }
 
-    private fun parseType(box: Element): String {
-        val span = box.select(".look_datei > .kleine_schrift").first()
-        return span.text()
+    private fun parseType(box: Element): String? {
+        return box.select(".look_datei > .kleine_schrift").firstOrNull()?.text()
     }
 
     private fun parseHeader(box: Element): Pair<String, String> {
