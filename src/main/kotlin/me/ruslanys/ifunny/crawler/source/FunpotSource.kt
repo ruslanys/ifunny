@@ -108,7 +108,8 @@ class FunpotSource : Source(Language.GERMAN, "https://funpot.net") {
     }
 
     private fun parseResourceUrl(container: Element): String {
-        return container.getElementById("Direktdownload").absUrl("href")
+        return container.getElementById("Direktdownload")?.absUrl("href")
+                ?: container.select("video > source").first().absUrl("src")
     }
 
     companion object {
