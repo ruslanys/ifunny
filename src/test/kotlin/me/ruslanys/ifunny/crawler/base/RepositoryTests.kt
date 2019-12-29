@@ -1,6 +1,6 @@
 package me.ruslanys.ifunny.crawler.base
 
-import me.ruslanys.ifunny.crawler.component.MongoIndexCreator
+import me.ruslanys.ifunny.crawler.repository.MongoIndexCreator
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
