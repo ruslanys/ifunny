@@ -10,7 +10,7 @@ plugins {
 
 apply plugin: 'io.spring.dependency-management'
 
-group = 'me.ruslanys.ifunny'
+group = 'me.ruslanys'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 

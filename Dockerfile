@@ -2,7 +2,7 @@ FROM openjdk:11-jre-slim
 
 WORKDIR root/
 
-ADD build/libs/crawler-*.jar ./application.jar
+ADD build/libs/ifunny-*.jar ./application.jar
 
 EXPOSE 8080
 
