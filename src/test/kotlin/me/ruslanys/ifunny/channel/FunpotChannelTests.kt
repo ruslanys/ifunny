@@ -102,13 +102,39 @@ class FunpotChannelTests {
     }
 
     @Test
-    fun parseVideoMemeTest() {
+    fun parseVideoMemeWithDirectLinkTest() {
         val baseInfo = MemeInfo(
                 pageUrl = "https://funpot.net/?id=funpot0000454085&tagid=55&dateityp=",
                 title = "Wo ist er?",
                 publishDateTime = LocalDateTime.of(2019, 12, 26, 18, 13),
                 likes = 2,
                 author = "Oweiowei"
+        )
+        val html = javaClass.getResourceAsStream("funpot/meme_video_Direct.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val info = channel.parseMeme(baseInfo, html)
+
+        // --
+        assertThat(info.pageUrl).isEqualTo(baseInfo.pageUrl)
+        assertThat(info.title).isEqualTo(baseInfo.title)
+        assertThat(info.likes).isEqualTo(baseInfo.likes)
+        assertThat(info.author).isEqualTo(baseInfo.author)
+        assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
+
+        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/direktdownload/funpot085Vid868a36eo-qua0000454liMBkeyz03451y_x9cf/Wo_ist_er_.mp4")
+    }
+
+    @Test
+    fun parseVideoMemeWithoutDirectLinkTest() {
+        val baseInfo = MemeInfo(
+                pageUrl = "https://funpot.net/?id=funpot0000455173&tagid=55&dateityp=#",
+                title = "The Grüninen Profekt",
+                publishDateTime = LocalDateTime.of(2019, 12, 30, 10, 43),
+                likes = 0,
+                author = "Carlos"
         )
         val html = javaClass.getResourceAsStream("funpot/meme_video.html").bufferedReader().use {
             it.readText()
@@ -124,7 +150,7 @@ class FunpotChannelTests {
         assertThat(info.author).isEqualTo(baseInfo.author)
         assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
 
-        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/direktdownload/funpot085Vid868a36eo-qua0000454liMBkeyz03451y_x9cf/Wo_ist_er_.mp4")
+        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/daten/key_xyz/90/funpot0000455173_SD.mp4")
     }
 
 }
