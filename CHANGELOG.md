@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Funpot.net source
-- Debeste.de source
+- Funpot.net channel
+- Debeste.de channel
 - Prometheus metrics
 
 ### Fixed
