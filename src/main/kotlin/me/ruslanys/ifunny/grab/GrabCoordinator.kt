@@ -3,6 +3,7 @@ package me.ruslanys.ifunny.grab
 import me.ruslanys.ifunny.channel.Channel
 import me.ruslanys.ifunny.grab.event.PageIndexRequest
 import me.ruslanys.ifunny.grab.event.PageIndexedEvent
+import org.slf4j.LoggerFactory
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.event.EventListener
@@ -27,9 +28,17 @@ class GrabCoordinator(
 
     @EventListener
     fun onIndexedPage(event: PageIndexedEvent) {
+        log.info("Page #{} from {} has been processed", event.pageNumber, event.channel.getName())
+
         if (event.memesInfo.isNotEmpty()) {
             eventPublisher.publishEvent(PageIndexRequest(event.channel, event.pageNumber + 1))
+        } else {
+            log.info("{} processed.", event.channel.getName())
         }
+    }
+
+    companion object {
+        private val log = LoggerFactory.getLogger(GrabCoordinator::class.java)
     }
 
 }
