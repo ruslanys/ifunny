@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class MemeInfo(
         val pageUrl: String? = null,
-        val resourceUrl: String? = null,
+        val originUrl: String? = null,
         val title: String? = null,
         val publishDateTime: LocalDateTime? = null,
         val likes: Int? = null,

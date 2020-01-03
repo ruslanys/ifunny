@@ -99,7 +99,7 @@ class FunpotChannel : Channel(Language.GERMAN, "https://funpot.net") {
         // --
         return MemeInfo(
                 pageUrl = info.pageUrl,
-                resourceUrl = resourceUrl,
+                originUrl = resourceUrl,
                 title = info.title,
                 likes = info.likes,
                 author = info.author,
@@ -113,7 +113,7 @@ class FunpotChannel : Channel(Language.GERMAN, "https://funpot.net") {
     }
 
     companion object {
-        private val DATE_EXTRACTOR = DateTimeFormatter.ofPattern("dd.MM.yy'-'HH:mm")
+        private val DATE_EXTRACTOR = DateTimeFormatter.ofPattern("d.M.yy'-'HH:mm")
     }
 
 }

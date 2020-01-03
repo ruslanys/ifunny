@@ -92,7 +92,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
                 title = info.title,
                 likes = info.likes,
                 comments = info.comments,
-                resourceUrl = pictureUrl ?: videoUrl,
+                originUrl = pictureUrl ?: videoUrl,
                 author = author,
                 publishDateTime = publishDateTime
         )

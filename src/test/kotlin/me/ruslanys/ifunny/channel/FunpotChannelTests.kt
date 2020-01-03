@@ -37,8 +37,8 @@ class FunpotChannelTests {
         assertThat(list.mapNotNull { it.author }).containsExactly("Nogula", "Fossy", "SueHoe", "Nogula", "SueHoe", "funmaster", "Alex", "Oweiowei", "Fossy", "Siggi", "Beatzekatze", "Beatzekatze", "Beatzekatze", "Beatzekatze", "Knatter", "Beatzekatze", "WienerWalzer", "Sokan", "Bert43", "Fossy", "Keule56", "Bonobo666", "Sokan", "Sylke")
 
         assertThat(list).allMatch { it.publishDateTime != null }
-        assertThat(list.first().publishDateTime).isEqualTo(LocalDateTime.of(2019, 12, 26, 20, 51))
-        assertThat(list.last().publishDateTime).isEqualTo(LocalDateTime.of(2019, 12, 26, 13, 53))
+        assertThat(list.first().publishDateTime).isEqualTo(LocalDateTime.of(2020, 12, 26, 20, 51))
+        assertThat(list.last().publishDateTime).isEqualTo(LocalDateTime.of(2020, 12, 26, 13, 53))
     }
 
     @Test
@@ -73,7 +73,7 @@ class FunpotChannelTests {
         assertThat(info.author).isEqualTo(baseInfo.author)
         assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
 
-        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/direktdownload/funpot125317829cbb65706700004545001keyzc4451y_x6c2/Helmut_Kohl_kommt_in_die_Hoelle.jpg")
+        assertThat(info.originUrl).isEqualTo("https://funpot.net/direktdownload/funpot125317829cbb65706700004545001keyzc4451y_x6c2/Helmut_Kohl_kommt_in_die_Hoelle.jpg")
     }
 
     @Test
@@ -98,7 +98,7 @@ class FunpotChannelTests {
         assertThat(info.author).isEqualTo(baseInfo.author)
         assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
 
-        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/direktdownload/funpot1312307933d068623100004548606keyz72451y_x4ba/Sportlich_291.gif")
+        assertThat(info.originUrl).isEqualTo("https://funpot.net/direktdownload/funpot1312307933d068623100004548606keyz72451y_x4ba/Sportlich_291.gif")
     }
 
     @Test
@@ -124,7 +124,7 @@ class FunpotChannelTests {
         assertThat(info.author).isEqualTo(baseInfo.author)
         assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
 
-        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/direktdownload/funpot085Vid868a36eo-qua0000454liMBkeyz03451y_x9cf/Wo_ist_er_.mp4")
+        assertThat(info.originUrl).isEqualTo("https://funpot.net/direktdownload/funpot085Vid868a36eo-qua0000454liMBkeyz03451y_x9cf/Wo_ist_er_.mp4")
     }
 
     @Test
@@ -150,7 +150,7 @@ class FunpotChannelTests {
         assertThat(info.author).isEqualTo(baseInfo.author)
         assertThat(info.publishDateTime).isEqualTo(baseInfo.publishDateTime)
 
-        assertThat(info.resourceUrl).isEqualTo("https://funpot.net/daten/key_xyz/90/funpot0000455173_SD.mp4")
+        assertThat(info.originUrl).isEqualTo("https://funpot.net/daten/key_xyz/90/funpot0000455173_SD.mp4")
     }
 
 }

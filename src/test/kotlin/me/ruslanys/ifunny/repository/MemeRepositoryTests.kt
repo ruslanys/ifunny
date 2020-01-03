@@ -86,4 +86,59 @@ class MemeRepositoryTests : RepositoryTests() {
         assertThat(page.content).containsExactly(thirdMeme, secondMeme, firstMeme, emptyDateThird, emptyDateSecond, emptyDateFirst)
     }
 
+    @Test
+    fun shouldExistsByLanguageAndFingerprint() {
+        val fingerprint = "FINGERPRINT"
+        val language = Language.GERMAN
+
+        mongoTemplate.save(createDummyMeme(language = language, fingerprint = fingerprint))
+
+        // --
+        val result = repository.existsByLanguageAndFingerprint(language.code, fingerprint)
+
+        // --
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun shouldNotExistsByLanguageAndFingerprintWhereLanguageIsDifferent() {
+        val fingerprint = "FINGERPRINT"
+
+        mongoTemplate.save(createDummyMeme(language = Language.GERMAN, fingerprint = fingerprint))
+
+        // --
+        val result = repository.existsByLanguageAndFingerprint(Language.RUSSIAN.code, fingerprint)
+
+        // --
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun shouldNotExistsByLanguageAndFingerprintWhereFingerprintIsDifferent() {
+        val language = Language.GERMAN
+
+        mongoTemplate.save(createDummyMeme(language = language, fingerprint = "123"))
+
+        // --
+        val result = repository.existsByLanguageAndFingerprint(language.code, "321")
+
+        // --
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun findByPageUrls() {
+        val urls = arrayListOf("http://debeste.de/meme-1", "http://debeste.de/meme-2", "http://debeste.de/meme-3")
+        urls.forEach {
+            mongoTemplate.save(createDummyMeme(pageUrl = it))
+        }
+
+        // --
+        val result = repository.findByPageUrlIn(urls)
+
+        // --
+        assertThat(result).hasSize(urls.size)
+        assertThat(result.map { it.pageUrl }).containsExactlyElementsOf(urls)
+    }
+
 }

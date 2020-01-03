@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Crawler itself
+- Memes deduplication
+- S3 Integration
 - Funpot.net channel
 - Debeste.de channel
 - Prometheus metrics
