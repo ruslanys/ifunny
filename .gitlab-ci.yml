@@ -1,6 +1,7 @@
 stages:
   - build
   - package
+  - deploy
 
 
 variables:
@@ -56,6 +57,64 @@ package-docker:
     - docker build -t $IMAGE_NAME:$IMAGE_TAG .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
     - docker push $IMAGE_NAME:$IMAGE_TAG
+  only:
+    - master
+    - tags
+
+
+#####################
+# Deployment
+#####################
+.prepare-key-script: &prepare_key
+  - apk add --no-cache openssh-client
+  - eval $(ssh-agent -s)
+  - echo "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
+.deploy-script: &deploy
+  - if [[ ${CI_COMMIT_REF_NAME} == master ]]; then export IMAGE_TAG=latest; else export IMAGE_TAG=${CI_COMMIT_REF_NAME}; fi;
+  - ssh $SSH_USER@$SSH_HOST "docker stop $CONTAINER_NAME || true"
+  - ssh $SSH_USER@$SSH_HOST "docker rm $CONTAINER_NAME || true"
+  - ssh $SSH_USER@$SSH_HOST "docker rmi $IMAGE_NAME:$IMAGE_TAG || true"
+  - ssh $SSH_USER@$SSH_HOST "docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com"
+  - |
+    ssh $SSH_USER@$SSH_HOST "
+      docker run -d --name $CONTAINER_NAME --restart always \
+                      -p $CONTAINER_PORT:8080 \
+                      -e MONGODB_HOST=$MONGODB_HOST \
+                      -e MONGODB_DATABASE=$MONGODB_DATABASE \
+                      -e MONGODB_USERNAME=$MONGODB_USERNAME \
+                      -e MONGODB_PASSWORD=$MONGODB_PASSWORD \
+                      -e AWS_S3_ACCESS_KEY=$AWS_S3_ACCESS_KEY \
+                      -e AWS_S3_SECRET_KEY=$AWS_S3_SECRET_KEY \
+                      -e AWS_S3_REGION=$AWS_S3_REGION \
+                      -e AWS_S3_BUCKET=$AWS_S3_BUCKET \
+                      $IMAGE_NAME:$IMAGE_TAG
+    "
+
+deploy-production:
+  image: docker:latest
+  stage: deploy
+  dependencies: []
+  variables:
+    CONTAINER_NAME: ifunny
+    CONTAINER_PORT: 4386
+    MONGODB_HOST: $PRODUCTION_MONGODB_HOST
+    MONGODB_DATABASE: $PRODUCTION_MONGODB_DATABASE
+    MONGODB_USERNAME: $PRODUCTION_MONGODB_USERNAME
+    MONGODB_PASSWORD: $PRODUCTION_MONGODB_PASSWORD
+    AWS_S3_ACCESS_KEY: $PRODUCTION_AWS_S3_ACCESS_KEY
+    AWS_S3_SECRET_KEY: $PRODUCTION_AWS_S3_SECRET_KEY
+    AWS_S3_REGION: $PRODUCTION_AWS_S3_REGION
+    AWS_S3_BUCKET: $PRODUCTION_AWS_S3_BUCKET
+  before_script: *prepare_key
+  script: *deploy
+  environment:
+    name: production
+    url: https://ifunny.ruslanys.me
   only:
     - master
     - tags
