@@ -67,7 +67,7 @@ class DebesteChannelTests {
         assertThat(info.likes).isEqualTo(baseInfo.likes)
         assertThat(info.comments).isEqualTo(baseInfo.comments)
 
-        assertThat(info.resourceUrl).isEqualTo("http://debeste.de/upload/f372e8943cf093f1beb344f95a419daa6585.jpg")
+        assertThat(info.originUrl).isEqualTo("http://debeste.de/upload/f372e8943cf093f1beb344f95a419daa6585.jpg")
         assertThat(info.author).isEqualTo("heidi2")
         assertThat(info.publishDateTime).isEqualTo(LocalDateTime.of(2019, 12, 26, 13, 40, 1))
     }
@@ -93,7 +93,7 @@ class DebesteChannelTests {
         assertThat(info.likes).isEqualTo(baseInfo.likes)
         assertThat(info.comments).isEqualTo(baseInfo.comments)
 
-        assertThat(info.resourceUrl).isEqualTo("http://debeste.de/upload/e4b9c282887d58b5ecfcc7d02823d4e4.jpg")
+        assertThat(info.originUrl).isEqualTo("http://debeste.de/upload/e4b9c282887d58b5ecfcc7d02823d4e4.jpg")
         assertThat(info.author).isEqualTo("pola")
 
         assertThat(info.publishDateTime).isNull()
@@ -120,7 +120,7 @@ class DebesteChannelTests {
         assertThat(info.likes).isEqualTo(baseInfo.likes)
         assertThat(info.comments).isEqualTo(baseInfo.comments)
 
-        assertThat(info.resourceUrl).isEqualTo("http://debeste.de/upload/c8b848656368e728b70647b2d8cb3ca76476.gif")
+        assertThat(info.originUrl).isEqualTo("http://debeste.de/upload/c8b848656368e728b70647b2d8cb3ca76476.gif")
         assertThat(info.publishDateTime).isEqualTo(LocalDateTime.of(2019, 12, 24, 16, 40, 1))
 
         assertThat(info.author).isNull()
@@ -147,7 +147,7 @@ class DebesteChannelTests {
         assertThat(info.likes).isEqualTo(baseInfo.likes)
         assertThat(info.comments).isEqualTo(baseInfo.comments)
 
-        assertThat(info.resourceUrl).isEqualTo("http://debeste.de/upload2/v/cc2809a58b6e11c6c99ed9a362b18e822390.mp4")
+        assertThat(info.originUrl).isEqualTo("http://debeste.de/upload2/v/cc2809a58b6e11c6c99ed9a362b18e822390.mp4")
 
         assertThat(info.author).isNull()
         assertThat(info.publishDateTime).isNull()

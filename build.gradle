@@ -16,6 +16,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 ext {
@@ -41,6 +42,9 @@ dependencies {
     // Tools
     implementation("org.jsoup:jsoup:$jsoupVersion")
     implementation('io.micrometer:micrometer-registry-prometheus')
+    implementation('software.amazon.awssdk:s3:2.10.41')
+    implementation('org.apache.tika:tika-core:1.23')
+    implementation('com.github.kilianB:JImageHash:3.0.0')
 
 
     // DevTools
@@ -52,6 +56,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 }
 
 sourceSets {
@@ -100,19 +105,16 @@ jacocoTestReport {
         html.enabled = true
     }
 
-    /*
     afterEvaluate {
         classDirectories.from = files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    'me/ruslanys/jablog/*Application*',
-                    'me/ruslanys/jablog/domain/**',
-                    'me/ruslanys/jablog/model/**',
-                    'me/ruslanys/jablog/exception/**',
-                    'me/ruslanys/jablog/config/**'
+                    'me/ruslanys/ifunny/*Application*',
+                    'me/ruslanys/ifunny/config/**',
+                    'me/ruslanys/ifunny/property/**',
+                    'me/ruslanys/ifunny/domain/**',
             ])
         })
     }
-    */
 }
 check.dependsOn jacocoTestReport
 

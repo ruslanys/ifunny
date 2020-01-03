@@ -33,4 +33,6 @@ abstract class Channel(val language: Language, val baseUrl: String) {
      */
     abstract fun parseMeme(info: MemeInfo, body: String): MemeInfo
 
+    fun getName(): String = javaClass.simpleName
+
 }

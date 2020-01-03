@@ -11,4 +11,8 @@ interface MemeRepository : MongoRepository<Meme, String> {
 
     fun findByLanguage(language: String, pageable: Pageable): Page<Meme>
 
+    fun findByPageUrlIn(pageUrls: List<String>): List<Meme>
+
+    fun existsByLanguageAndFingerprint(language: String, fingerprint: String): Boolean
+
 }
