@@ -45,6 +45,7 @@ dependencies {
     implementation('software.amazon.awssdk:s3:2.10.41')
     implementation('org.apache.tika:tika-core:1.23')
     implementation('com.github.kilianB:JImageHash:3.0.0')
+    implementation('org.apache.httpcomponents:httpclient')
 
 
     // DevTools
