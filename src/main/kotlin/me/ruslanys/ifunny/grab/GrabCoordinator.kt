@@ -27,7 +27,9 @@ class GrabCoordinator(
 
     @EventListener
     fun onIndexedPage(event: PageIndexedEvent) {
-        eventPublisher.publishEvent(PageIndexRequest(event.channel, event.pageNumber + 1))
+        if (event.memesInfo.isNotEmpty()) {
+            eventPublisher.publishEvent(PageIndexRequest(event.channel, event.pageNumber + 1))
+        }
     }
 
 }
