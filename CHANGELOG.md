@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Funpot.net channel
 - Debeste.de channel
 - Prometheus metrics
+- GitLab Pipeline: CD
 
 ### Fixed
 - Tag v0.0.1 reference fix

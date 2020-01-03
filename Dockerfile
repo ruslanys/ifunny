@@ -6,4 +6,4 @@ ADD build/libs/ifunny-*.jar ./application.jar
 
 EXPOSE 8080
 
-CMD java -server -Xmx1024M -Djava.security.egd=/dev/zrandom -jar /root/application.jar
+CMD java -server -Xmx3G -Djava.security.egd=/dev/zrandom -jar /root/application.jar
