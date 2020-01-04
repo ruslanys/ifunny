@@ -20,6 +20,11 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
         val list = arrayListOf<MemeInfo>()
 
         for (box in boxes) {
+            // Skip boxes without content
+            if (box.getElementsByClass("objectWrapper").isEmpty()) {
+                continue
+            }
+
             // Header
             val header = parseHeader(box)
             val url = header.first

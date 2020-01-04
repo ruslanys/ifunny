@@ -43,7 +43,20 @@ class DebesteChannelTests {
         val list = channel.parsePage("<html></html>")
 
         // --
-        assertThat(list).hasSize(0)
+        assertThat(list).isEmpty()
+    }
+
+    @Test
+    fun parseLastPageShouldReturnEmptyList() {
+        val html = javaClass.getResourceAsStream("debeste/page_last.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val list = channel.parsePage(html)
+
+        // --
+        assertThat(list).isEmpty()
     }
 
     @Test
