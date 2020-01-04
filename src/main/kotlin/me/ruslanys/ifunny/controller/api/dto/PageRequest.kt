@@ -1,5 +1,6 @@
 package me.ruslanys.ifunny.controller.api.dto
 
+import io.swagger.v3.oas.annotations.Hidden
 import me.ruslanys.ifunny.controller.api.validation.SortConstraint
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -16,10 +17,12 @@ open class PageRequest(
         private val maySortBy: Set<String> = setOf("id")
 ) : Pageable {
 
+    @Hidden
     override fun getPageNumber(): Int = (offset / limit + 1).toInt()
 
     override fun next(): Pageable = PageRequest(offset + limit, limit, sortBy, sortDirection, maySortBy)
 
+    @Hidden
     override fun getPageSize(): Int = limit
 
     fun setLimit(limit: Int) {
@@ -34,6 +37,7 @@ open class PageRequest(
 
     override fun hasPrevious(): Boolean = offset > 0
 
+    @Hidden
     override fun getSort(): Sort = Sort.by(sortDirection, sortBy)
 
     override fun first(): Pageable = PageRequest(0, limit, sortBy, sortDirection, maySortBy)
@@ -48,7 +52,18 @@ open class PageRequest(
 
     override fun previousOrFirst(): Pageable = if (hasPrevious()) previous() else first()
 
+    @Hidden
     fun getMaySortBy(): Set<String> = maySortBy
+
+    @Hidden
+    override fun isPaged(): Boolean {
+        return super.isPaged()
+    }
+
+    @Hidden
+    override fun isUnpaged(): Boolean {
+        return super.isUnpaged()
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
