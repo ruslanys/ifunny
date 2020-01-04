@@ -1,0 +1,7 @@
+{
+  "id": "5e107cc18b12145d4624f23c",
+  "language": "de",
+  "channelName": "TestChannel",
+  "title": "Title",
+  "url": "https://bucket.s3.region.amazonaws.com/picture.jpg"
+}

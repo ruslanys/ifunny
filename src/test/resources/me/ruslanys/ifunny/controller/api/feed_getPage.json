@@ -1,0 +1,26 @@
+{
+  "totalCount": 3,
+  "list": [
+    {
+      "id": "5e107cc18b12145d4624f23c",
+      "language": "de",
+      "channelName": "TestChannel",
+      "title": "Title 1",
+      "url": "https://bucket.s3.region.amazonaws.com/1.jpg"
+    },
+    {
+      "id": "5e107cc18b12145d4624f23d",
+      "language": "de",
+      "channelName": "TestChannel",
+      "title": "Title 2",
+      "url": "https://bucket.s3.region.amazonaws.com/2.jpg"
+    },
+    {
+      "id": "5e107cc18b12145d4624f23e",
+      "language": "de",
+      "channelName": "TestChannel",
+      "title": "Title 3",
+      "url": "https://bucket.s3.region.amazonaws.com/3.jpg"
+    }
+  ]
+}
