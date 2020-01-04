@@ -21,6 +21,7 @@ repositories {
 
 ext {
     jsoupVersion = '1.12.1'
+    springdocVersion = '1.1.49'
 }
 
 dependencies {
@@ -37,6 +38,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     //implementation("org.springframework.boot:spring-boot-starter-data-redis")
     //implementation("org.springframework.boot:spring-boot-starter-cache")
+
+
+    // Swagger
+    implementation("org.springdoc:springdoc-openapi-core:$springdocVersion")
+    implementation("org.springdoc:springdoc-openapi-ui:$springdocVersion")
 
 
     // Tools
