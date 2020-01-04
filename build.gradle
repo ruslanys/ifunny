@@ -42,7 +42,7 @@ dependencies {
 
     // Swagger
     implementation("org.springdoc:springdoc-openapi-core:$springdocVersion")
-    implementation("org.springdoc:springdoc-openapi-ui:$springdocVersion")
+    implementation('org.webjars:swagger-ui:3.24.3')
 
 
     // Tools
