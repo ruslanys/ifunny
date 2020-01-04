@@ -80,6 +80,12 @@ $ docker-compose up -d
 
 Если Вы используете Intellij IDEA, в репозиторий добавлена конфигурация запуска Docker-compose под именем `Local Environment`.
 
+### Swagger
+
+Swagger Open API v3 Specification: `/v3/api-docs`.
+
+Swagger UI: `/swagger-ui.html`.
+
 ## Реализация
 
 ### Версионирование
