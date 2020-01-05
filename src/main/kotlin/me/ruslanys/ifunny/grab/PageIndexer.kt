@@ -5,12 +5,10 @@ import me.ruslanys.ifunny.grab.event.PageIndexRequest
 import me.ruslanys.ifunny.grab.event.PageIndexedEvent
 import me.ruslanys.ifunny.property.GrabProperties
 import me.ruslanys.ifunny.service.MemeService
-import org.apache.http.impl.client.HttpClientBuilder
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.event.EventListener
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 
@@ -23,9 +21,6 @@ class PageIndexer(
 ) {
 
     private val restTemplate = restTemplateBuilder
-            .requestFactory {
-                HttpComponentsClientHttpRequestFactory(HttpClientBuilder.create().disableRedirectHandling().build())
-            }
             .defaultHeader("User-Agent", grabProperties.userAgent)
             .build()
 

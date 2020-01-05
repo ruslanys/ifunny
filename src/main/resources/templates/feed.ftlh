@@ -128,6 +128,10 @@
                         <div class="loader feed-loader"></div>
                     </div>
 
+                    <div v-if="!isLoading && !theEndReached" class="column is-full has-text-centered">
+                        <button v-on:click="loadNextPage" class="button is-light is-warning is-medium">Load More...</button>
+                    </div>
+
                 </div>
 
             </div>
