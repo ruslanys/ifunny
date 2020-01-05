@@ -27,9 +27,11 @@ class FunpotChannelTests {
         }
 
         // --
-        val list = channel.parsePage(html)
+        val page = channel.parsePage(1, html)
+        val list = page.memesInfo
 
         // --
+        assertThat(page.hasNext).isTrue()
         assertThat(list).hasSize(38)
         assertThat(list).allMatch { it.pageUrl != null }
         assertThat(list).allMatch { it.title != null }
@@ -42,12 +44,23 @@ class FunpotChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
-        // --
-        val list = channel.parsePage("<html></html>")
+    fun parseLastPageShouldReturnHasNextFalse() {
+        val html = javaClass.getResourceAsStream("funpot/page_last.html").bufferedReader().use {
+            it.readText()
+        }
 
         // --
-        assertThat(list).hasSize(0)
+        val page = channel.parsePage(1, html)
+
+        // --
+        assertThat(page.hasNext).isFalse()
+    }
+
+    @Test
+    fun parseInvalidPageShouldReturnEmptyList() {
+        val page = channel.parsePage(1, "<html></html>")
+        assertThat(page.hasNext).isFalse()
+        assertThat(page.memesInfo).isEmpty()
     }
 
     @Test

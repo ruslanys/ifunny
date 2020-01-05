@@ -27,9 +27,11 @@ class DebesteChannelTests {
         }
 
         // --
-        val list = channel.parsePage(html)
+        val page = channel.parsePage(5, html)
+        val list = page.memesInfo
 
         // --
+        assertThat(page.hasNext).isTrue()
         assertThat(list).hasSize(8)
         assertThat(list).allMatch { it.pageUrl != null }
         assertThat(list).allMatch { it.title != null }
@@ -38,25 +40,23 @@ class DebesteChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
-        // --
-        val list = channel.parsePage("<html></html>")
-
-        // --
-        assertThat(list).isEmpty()
-    }
-
-    @Test
-    fun parseLastPageShouldReturnEmptyList() {
+    fun parseLastPageShouldReturnHasNextFalse() {
         val html = javaClass.getResourceAsStream("debeste/page_last.html").bufferedReader().use {
             it.readText()
         }
 
         // --
-        val list = channel.parsePage(html)
+        val page = channel.parsePage(1, html)
 
         // --
-        assertThat(list).isEmpty()
+        assertThat(page.hasNext).isFalse()
+    }
+
+    @Test
+    fun parseInvalidPageShouldReturnEmptyList() {
+        val page = channel.parsePage(1, "<html></html>")
+        assertThat(page.hasNext).isFalse()
+        assertThat(page.memesInfo).isEmpty()
     }
 
     @Test

@@ -28,10 +28,10 @@ class GrabCoordinator(
 
     @EventListener
     fun onIndexedPage(event: PageIndexedEvent) {
-        log.info("Page #{} from {} has been processed", event.pageNumber, event.channel.getName())
+        log.info("Page #{} from {} has been processed", event.page.number, event.channel.getName())
 
-        if (event.memesInfo.isNotEmpty()) {
-            eventPublisher.publishEvent(PageIndexRequest(event.channel, event.pageNumber + 1))
+        if (event.page.hasNext) {
+            eventPublisher.publishEvent(PageIndexRequest(event.channel, event.page.number + 1))
         } else {
             log.info("{} processed.", event.channel.getName())
         }

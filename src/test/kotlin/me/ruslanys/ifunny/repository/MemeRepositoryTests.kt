@@ -5,7 +5,7 @@ import me.ruslanys.ifunny.domain.Language
 import me.ruslanys.ifunny.domain.Meme
 import me.ruslanys.ifunny.util.createDummyMeme
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -21,9 +21,8 @@ class MemeRepositoryTests : RepositoryTests() {
     @Autowired
     private lateinit var repository: MemeRepository
 
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
+    @AfterEach
+    fun tearDown() {
         repository.deleteAll()
     }
 

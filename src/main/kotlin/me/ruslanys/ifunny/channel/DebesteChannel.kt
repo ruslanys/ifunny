@@ -13,7 +13,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
 
     override fun pagePath(pageNumber: Int): String = "$baseUrl/$pageNumber"
 
-    override fun parsePage(body: String): List<MemeInfo> {
+    override fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body)
         val boxes = document.getElementsByClass("box")
 
@@ -48,7 +48,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
             list.add(info)
         }
 
-        return list
+        return Page(pageNumber, isHasNext(document), list)
     }
 
     private fun parseHeader(box: Element): Pair<String, String> {
@@ -79,6 +79,10 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
         } else {
             null
         }
+    }
+
+    private fun isHasNext(document: Element): Boolean {
+        return document.select("li.next").firstOrNull()?.hasClass("disabled") == false
     }
 
     override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
