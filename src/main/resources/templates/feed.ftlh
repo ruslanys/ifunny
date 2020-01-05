@@ -156,6 +156,8 @@
         },
         methods: {
             getPage: function () {
+                this.isLoading = true;
+
                 axios
                     .get('/api/feed', {
                         params: this.params
@@ -170,7 +172,6 @@
                     })
             },
             loadNextPage: function() {
-                this.isLoading = true;
                 this.params.offset += this.params.limit;
                 this.getPage()
             },
