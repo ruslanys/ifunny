@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crawler itself
 - Memes deduplication
 - S3 Integration
+- Lachschon.de channel
 - Funpot.net channel
 - Debeste.de channel
 - Prometheus metrics
