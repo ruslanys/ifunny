@@ -44,12 +44,12 @@ class PageIndexer(
         val path = channel.pagePath(pageNumber)
         val responseBody = restTemplate.getForObject(path, String::class.java)
 
-        val memesInfo = channel.parsePage(responseBody!!)
-        log.trace("At the page [#{}|{}] #{} memes fetched", pageNumber, channel.getName(), memesInfo.size)
+        val page = channel.parsePage(pageNumber, responseBody!!)
 
         // Filter already processed pages
-        val existingUrls = memeService.findByPageUrls(memesInfo.map { it.pageUrl!! }).map { it.pageUrl }.toSet()
-        val newMemes = memesInfo.filter { !existingUrls.contains(it.pageUrl) }
+        val pageUrls = page.memesInfo.mapNotNull { it.pageUrl }
+        val existingUrls = memeService.findByPageUrls(pageUrls).map { it.pageUrl }.toSet()
+        val newMemes = page.memesInfo.filter { !existingUrls.contains(it.pageUrl) }
 
         // Request memes indexation
         for (memeInfo in newMemes) {
@@ -57,7 +57,7 @@ class PageIndexer(
         }
 
         // --
-        eventPublisher.publishEvent(PageIndexedEvent(channel, pageNumber, memesInfo))
+        eventPublisher.publishEvent(PageIndexedEvent(channel, page))
     }
 
 

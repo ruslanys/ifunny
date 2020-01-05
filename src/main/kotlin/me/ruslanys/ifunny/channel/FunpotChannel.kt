@@ -12,7 +12,7 @@ class FunpotChannel : Channel(Language.GERMAN, "https://funpot.net") {
 
     override fun pagePath(pageNumber: Int): String = "$baseUrl/entdecken/lustiges/$pageNumber/"
 
-    override fun parsePage(body: String): List<MemeInfo> {
+    override fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body)
         val boxes = document.getElementsByClass("contentline")
 
@@ -50,7 +50,7 @@ class FunpotChannel : Channel(Language.GERMAN, "https://funpot.net") {
             list.add(info)
         }
 
-        return list
+        return Page(pageNumber, isHasNext(document), list)
     }
 
     private fun parseType(box: Element): String? {
@@ -87,6 +87,10 @@ class FunpotChannel : Channel(Language.GERMAN, "https://funpot.net") {
 
         // --
         return LocalDateTime.parse(unifiedDateText, DATE_EXTRACTOR)
+    }
+
+    private fun isHasNext(document: Element): Boolean {
+        return document.select("a > img[src=https://funpot.net/includes/logos/pfeil_rechts.gif]").isNotEmpty()
     }
 
     override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
