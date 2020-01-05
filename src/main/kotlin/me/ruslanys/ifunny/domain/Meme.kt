@@ -2,13 +2,18 @@ package me.ruslanys.ifunny.domain
 
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.index.CompoundIndex
+import org.springframework.data.mongodb.core.index.CompoundIndexes
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.MongoId
 import java.time.LocalDateTime
 
 @Document
-@CompoundIndex(name = "language_fingerprint_idx", def = "{'language': 1, 'fingerprint': 1}")
+@CompoundIndexes(
+        CompoundIndex(name = "language2fingerprint_idx", def = "{'language': 1, 'fingerprint': 1}"),
+        CompoundIndex(name = "language2publishDateTime_idx", def = "{'language': 1, 'publishDateTime': -1}"),
+        CompoundIndex(name = "language2likes_idx", def = "{'language': 1, 'likes': -1}")
+)
 data class Meme(
 
         @Indexed
