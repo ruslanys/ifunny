@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Feed API Endpoint
 - Open API 3 Specification (including Swagger UI)
+- Frontend: Feed Page
 - Crawler itself
 - Memes deduplication
 - S3 Integration
