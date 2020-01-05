@@ -103,7 +103,7 @@
                                 </figure>
                             </div>
 
-                            <div class="card-content">
+                            <div v-if="meme.author || meme.publishDateTime" class="card-content">
                                 <div class="content">
                                     <p v-if="meme.author" class="subtitle is-6">@{{meme.author}}</p>
                                     <time v-if="meme.publishDateTime">{{meme.publishDateTime | formatDate }}</time>
