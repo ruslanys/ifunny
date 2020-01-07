@@ -97,7 +97,7 @@
                                     <img :src="meme.url" :alt="meme.title">
                                 </figure>
                                 <figure v-else class="image">
-                                    <video controls>
+                                    <video controls muted>
                                         <source :src="meme.url" :type="meme.contentType"/>
                                     </video>
                                 </figure>
