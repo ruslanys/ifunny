@@ -1,4 +1,4 @@
-package me.ruslanys.ifunny.controller.api
+package me.ruslanys.ifunny.controller
 
 import me.ruslanys.ifunny.exception.NotFoundException
 import org.springframework.http.HttpStatus

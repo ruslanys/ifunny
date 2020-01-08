@@ -1,7 +1,7 @@
-package me.ruslanys.ifunny.controller.api.dto
+package me.ruslanys.ifunny.controller.dto
 
 import io.swagger.v3.oas.annotations.Hidden
-import me.ruslanys.ifunny.controller.api.validation.SortConstraint
+import me.ruslanys.ifunny.controller.validation.SortConstraint
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import javax.validation.constraints.Max
