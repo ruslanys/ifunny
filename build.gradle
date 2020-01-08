@@ -36,8 +36,8 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-freemarker')
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    //implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    //implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
 
 
     // Swagger
@@ -119,6 +119,7 @@ jacocoTestReport {
                     'me/ruslanys/ifunny/config/**',
                     'me/ruslanys/ifunny/property/**',
                     'me/ruslanys/ifunny/domain/**',
+                    'me/ruslanys/ifunny/grab/event/**'
             ])
         })
     }

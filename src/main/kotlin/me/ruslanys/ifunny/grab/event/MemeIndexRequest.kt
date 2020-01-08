@@ -5,6 +5,6 @@ import me.ruslanys.ifunny.channel.MemeInfo
 
 class MemeIndexRequest(channel: Channel, val info: MemeInfo) : GrabEvent(channel) {
     override fun toString(): String {
-        return "MemeIndexRequest(channel=${channel.getName()}, info=$info)"
+        return "MemeIndexRequest(channel=$channel, info=$info)"
     }
 }

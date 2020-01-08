@@ -12,7 +12,6 @@ import me.ruslanys.ifunny.grab.event.ResourceDownloadRequest
 import me.ruslanys.ifunny.property.GrabProperties
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest
 import org.springframework.context.ApplicationEventPublisher
@@ -21,14 +20,12 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers.method
 import org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo
 import org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess
 
 
-@ExtendWith(SpringExtension::class)
 @RestClientTest(MemeIndexer::class, GrabProperties::class)
 @Import(SpyConfig::class, Application::class)
 @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD, classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
