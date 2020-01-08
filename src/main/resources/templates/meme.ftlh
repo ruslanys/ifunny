@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
-<@layout.head meme.title>
+<#if meme.contentType?starts_with("image")>
+    <#assign OG_IMAGE_URL=meme.url />
+<#else>
+    <#assign OG_IMAGE_URL='' />
+</#if>
+<@layout.head meme.title OG_IMAGE_URL>
     <style>
         video {
             width: 100%;
