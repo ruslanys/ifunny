@@ -10,3 +10,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ifunny
       MONGO_INITDB_ROOT_PASSWORD: ifunny
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - 6379:6379

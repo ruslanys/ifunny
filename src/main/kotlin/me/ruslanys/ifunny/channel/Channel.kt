@@ -35,4 +35,8 @@ abstract class Channel(val language: Language, val baseUrl: String) {
 
     fun getName(): String = javaClass.simpleName
 
+    override fun toString(): String {
+        return getName()
+    }
+
 }

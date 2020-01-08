@@ -1,6 +1,6 @@
 package me.ruslanys.ifunny.repository
 
-import me.ruslanys.ifunny.base.RepositoryTests
+import me.ruslanys.ifunny.base.MongoRepositoryTests
 import me.ruslanys.ifunny.domain.Language
 import me.ruslanys.ifunny.domain.Meme
 import me.ruslanys.ifunny.util.createDummyMeme
@@ -16,7 +16,7 @@ import org.springframework.data.domain.Sort
 import java.time.LocalDateTime
 import java.util.*
 
-class MemeRepositoryTests : RepositoryTests() {
+class MemeRepositoryTests : MongoRepositoryTests() {
 
     @Autowired
     private lateinit var repository: MemeRepository

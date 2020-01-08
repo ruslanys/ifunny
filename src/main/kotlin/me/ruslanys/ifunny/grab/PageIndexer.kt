@@ -1,5 +1,7 @@
 package me.ruslanys.ifunny.grab
 
+import me.ruslanys.ifunny.channel.Channel
+import me.ruslanys.ifunny.channel.MemeInfo
 import me.ruslanys.ifunny.grab.event.MemeIndexRequest
 import me.ruslanys.ifunny.grab.event.PageIndexRequest
 import me.ruslanys.ifunny.grab.event.PageIndexedEvent
@@ -41,18 +43,29 @@ class PageIndexer(
 
         val page = channel.parsePage(pageNumber, responseBody!!)
 
-        // Filter already processed pages
-        val pageUrls = page.memesInfo.mapNotNull { it.pageUrl }
+        // --
+        val newMemes = memesIndexation(channel, page.memesInfo)
+
+        // --
+        eventPublisher.publishEvent(PageIndexedEvent(channel, page, newMemes))
+    }
+
+    /**
+     * Memes indexation event.
+     *
+     * The method provides deduplication by filtering memes URLs with the existing in the DB list of URLs.
+     */
+    private fun memesIndexation(channel: Channel, memesInfo: List<MemeInfo>): Int {
+        val pageUrls = memesInfo.mapNotNull { it.pageUrl }
         val existingUrls = memeService.findByPageUrls(pageUrls).map { it.pageUrl }.toSet()
-        val newMemes = page.memesInfo.filter { !existingUrls.contains(it.pageUrl) }
+        val newMemes = memesInfo.filter { !existingUrls.contains(it.pageUrl) }
 
         // Request memes indexation
         for (memeInfo in newMemes) {
             eventPublisher.publishEvent(MemeIndexRequest(channel, memeInfo))
         }
 
-        // --
-        eventPublisher.publishEvent(PageIndexedEvent(channel, page))
+        return newMemes.size
     }
 
 
