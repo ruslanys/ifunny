@@ -17,9 +17,26 @@
         video {
             width: 100%;
         }
+
+        #backToTop {
+            bottom: 30px;
+            right: 30px;
+            position: fixed;
+            z-index: 100000;
+            transition: background-color .3s, opacity .5s, visibility .5s;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body>
+
+<button id="backToTop" class="button is-warning" onclick="scrollToTop(1000)"><i class="fas fa-arrow-up"></i></button>
 
 <section class="hero is-warning is-bold">
     <div class="hero-body">
@@ -175,15 +192,23 @@
                         }
                     })
             },
-            loadNextPage: function() {
+            loadNextPage: function () {
                 this.params.offset += this.params.limit;
                 this.getPage()
             },
-            handleScroll: function(event) {
+            handleScroll: function (event) {
+                // Lazy loading
                 let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-
                 if (bottomOfWindow && !this.isLoading && !this.theEndReached) {
                     this.loadNextPage()
+                }
+
+                // Back to top
+                let backToTopButton = document.getElementById("backToTop");
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.add("show");
+                } else {
+                    backToTopButton.classList.remove("show");
                 }
             },
             onChange: function (event) {
@@ -196,7 +221,7 @@
         created: function () {
             window.addEventListener('scroll', this.handleScroll);
         },
-        destroyed () {
+        destroyed() {
             window.removeEventListener('scroll', this.handleScroll);
         },
         mounted: function () {
@@ -208,6 +233,15 @@
             }
         }
     });
+
+    function scrollToTop(scrollDuration) {
+        const scrollStep = -window.scrollY / (scrollDuration / 15);
+        const scrollInterval = setInterval(function () {
+            if (window.scrollY !== 0) {
+                window.scrollBy(0, scrollStep);
+            } else clearInterval(scrollInterval);
+        }, 15);
+    }
 </script>
 </body>
 </html>
