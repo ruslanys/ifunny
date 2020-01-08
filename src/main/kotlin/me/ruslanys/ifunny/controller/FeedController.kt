@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping
 class FeedController {
 
     @GetMapping("/", "/index", "/index.htm", "/index.html", "/feed", "/feed.html")
-    fun feed(): String = "feed"
+    fun showFeed(): String = "feed"
 
 }

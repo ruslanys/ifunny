@@ -1,4 +1,4 @@
-package me.ruslanys.ifunny.controller.api.dto
+package me.ruslanys.ifunny.controller.dto
 
 import org.springframework.data.domain.Page
 

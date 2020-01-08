@@ -1,6 +1,6 @@
-package me.ruslanys.ifunny.controller.api.validation
+package me.ruslanys.ifunny.controller.validation
 
-import me.ruslanys.ifunny.controller.api.dto.PageRequest
+import me.ruslanys.ifunny.controller.dto.PageRequest
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 

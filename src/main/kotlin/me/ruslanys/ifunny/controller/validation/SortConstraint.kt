@@ -1,4 +1,4 @@
-package me.ruslanys.ifunny.controller.api.validation
+package me.ruslanys.ifunny.controller.validation
 
 import javax.validation.Constraint
 import javax.validation.Payload
