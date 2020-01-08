@@ -3,6 +3,7 @@ package me.ruslanys.ifunny.domain
 enum class Language(val code: String) {
 
     GERMAN("de"),
+    FRENCH("fr"),
     SPANISH("es"),
     ITALIAN("it"),
     PORTUGUESE("pt"),
