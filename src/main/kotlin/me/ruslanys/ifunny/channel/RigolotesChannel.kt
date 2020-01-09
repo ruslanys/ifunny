@@ -55,7 +55,7 @@ class RigolotesChannel(
         val list = arrayListOf<MemeInfo>()
 
         for (box in boxes) {
-            if (box.select("div.video-container").isNotEmpty()) {
+            if (box.select("div.video-container > iframe").isNotEmpty()) {
                 continue // skip youtube videos
             }
 
@@ -114,18 +114,29 @@ class RigolotesChannel(
 
     override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
-        val image = document.selectFirst("div.center-block > a > img")
+        val box = document.selectFirst(".article-box")
 
-        val resourceUrl = image.absUrl("src")
+        val videoUrl = parseVideoUrl(box)
+        val pictureUrl = parsePictureUrl(box)
 
         return MemeInfo(
                 pageUrl = info.pageUrl,
-                originUrl = resourceUrl,
+                originUrl = videoUrl ?: pictureUrl,
                 title = info.title,
                 publishDateTime = info.publishDateTime,
                 likes = info.likes,
                 author = info.author
         )
+    }
+
+    private fun parsePictureUrl(box: Element): String? {
+        val image = box.selectFirst("div.center-block > a > img") ?: return null
+        return image.absUrl("src")
+    }
+
+    private fun parseVideoUrl(box: Element): String? {
+        val video = box.selectFirst("div.center-block > video > source") ?: return null
+        return video.absUrl("src")
     }
 
     companion object {
