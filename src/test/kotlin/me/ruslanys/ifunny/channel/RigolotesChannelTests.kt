@@ -145,5 +145,19 @@ class RigolotesChannelTests {
 
         assertThat(info.originUrl).isEqualTo("https://rigolotes.fr/img/normal/20191210/012/20191210.jpg")
     }
+
+    @Test
+    fun parseGifMeme() {
+        val baseInfo = MemeInfo()
+        val html = javaClass.getResourceAsStream("rigolotes/meme_gif.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val info = channel.parseMeme(baseInfo, html)
+
+        // --
+        assertThat(info.originUrl).isEqualTo("https://rigolotes.fr/img/normal/20140730/HZ3/142555.gif")
+    }
 }
 

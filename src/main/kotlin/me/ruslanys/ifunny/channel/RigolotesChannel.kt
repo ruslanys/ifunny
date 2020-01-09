@@ -114,7 +114,7 @@ class RigolotesChannel(
 
     override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
-        val image = document.selectFirst("div.image-box > a > img")
+        val image = document.selectFirst("div.center-block > a > img")
 
         val resourceUrl = image.absUrl("src")
 
