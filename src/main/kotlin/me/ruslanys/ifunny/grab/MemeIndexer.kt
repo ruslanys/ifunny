@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component
 
 @Component
 class MemeIndexer(
-        properties: GrabProperties,
         restTemplateBuilder: RestTemplateBuilder,
+        grabProperties: GrabProperties,
         private val eventPublisher: ApplicationEventPublisher
 ) {
 
     private val restTemplate = restTemplateBuilder
-            .defaultHeader("User-Agent", properties.userAgent)
+            .defaultHeader("User-Agent", grabProperties.userAgent)
             .build()
 
     /**

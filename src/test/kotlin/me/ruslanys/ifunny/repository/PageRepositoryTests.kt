@@ -3,7 +3,6 @@ package me.ruslanys.ifunny.repository
 import me.ruslanys.ifunny.base.RedisRepositoryTests
 import me.ruslanys.ifunny.channel.DebesteChannel
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Duration
@@ -15,10 +14,6 @@ class PageRepositoryTests : RedisRepositoryTests() {
     @BeforeEach
     fun setUp() {
         repository = PageRepository(redisTemplate)
-    }
-
-    @AfterEach
-    fun tearDown() {
         redisTemplate.execute {
             it.flushAll()
         }
