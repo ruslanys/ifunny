@@ -101,6 +101,20 @@ class RigolotesChannelTests {
     }
 
     @Test
+    fun parsePageWithVideo() {
+        val html = javaClass.getResourceAsStream("rigolotes/page_with_video.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val page = channel.parsePage(1, html)
+        val list = page.memesInfo
+
+        // --
+        assertThat(list).hasSize(10)
+    }
+
+    @Test
     fun parseLastPageShouldReturnHasNextFalse() {
         val html = javaClass.getResourceAsStream("rigolotes/page_last.html").bufferedReader().use {
             it.readText()
@@ -148,16 +162,29 @@ class RigolotesChannelTests {
 
     @Test
     fun parseGifMeme() {
-        val baseInfo = MemeInfo()
         val html = javaClass.getResourceAsStream("rigolotes/meme_gif.html").bufferedReader().use {
             it.readText()
         }
 
         // --
-        val info = channel.parseMeme(baseInfo, html)
+        val info = channel.parseMeme(MemeInfo(), html)
 
         // --
         assertThat(info.originUrl).isEqualTo("https://rigolotes.fr/img/normal/20140730/HZ3/142555.gif")
     }
+
+    @Test
+    fun parseVideoMeme() {
+        val html = javaClass.getResourceAsStream("rigolotes/meme_video.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val info = channel.parseMeme(MemeInfo(), html)
+
+        // --
+        assertThat(info.originUrl).isEqualTo("https://rigolotes.fr/img/normal/20190910/ZIV/20190910.mp4")
+    }
+
 }
 
