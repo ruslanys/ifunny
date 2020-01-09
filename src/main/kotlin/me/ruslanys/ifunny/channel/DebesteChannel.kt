@@ -15,13 +15,13 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
 
     override fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body)
-        val boxes = document.getElementsByClass("box")
+        val boxes = document.select(".box")
 
         val list = arrayListOf<MemeInfo>()
 
         for (box in boxes) {
             // Skip boxes without content
-            if (box.getElementsByClass("objectWrapper").isEmpty()) {
+            if (box.select(".objectWrapper").isEmpty()) {
                 continue
             }
 
@@ -52,8 +52,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
     }
 
     private fun parseHeader(box: Element): Pair<String, String> {
-        val header = box.getElementsByTag("h2").first()
-        val link = header.getElementsByTag("a").first()
+        val link = box.select("h2 > a")
 
         val memeUrl = link.attr("href")
         val title = link.text()
@@ -62,7 +61,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
     }
 
     private fun parseRate(box: Element): Int? {
-        val rateText = box.getElementsByClass("rate").first().text()
+        val rateText = box.selectFirst(".rate").text()
         val rateMatcher = NUMBER_EXTRACTOR.matcher(rateText)
         return if (rateMatcher.find()) {
             rateMatcher.group(1).toInt()
@@ -72,7 +71,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
     }
 
     private fun parseComments(box: Element): Int? {
-        val commentsText = box.getElementsByClass("objectMeta").first().getElementsByTag("a").text()
+        val commentsText = box.selectFirst(".objectMeta > a").text()
         val commentsMatcher = NUMBER_EXTRACTOR.matcher(commentsText)
         return if (commentsMatcher.find()) {
             commentsMatcher.group(1).toInt()
@@ -87,7 +86,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
 
     override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
-        val box = document.getElementsByClass("box").first()
+        val box = document.selectFirst(".box")
 
         // --
         val pictureUrl = parsePictureUrl(box)
@@ -108,28 +107,17 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
     }
 
     private fun parsePictureUrl(box: Element): String? {
-        val boxes = box.getElementsByClass("box-img")
-        return if (boxes.isNotEmpty()) {
-            boxes.first().getElementsByTag("img").first().absUrl("src")
-        } else {
-            null
-        }
+        val image = box.selectFirst(".box-img > img") ?: return null
+        return image.absUrl("src")
     }
 
     private fun parseVideoUrl(box: Element): String? {
-        val boxes = box.getElementsByClass("box-video")
-        return if (boxes.isNotEmpty()) {
-            boxes.first()
-                    .getElementsByTag("video").first()
-                    .getElementsByTag("source").first()
-                    .absUrl("src")
-        } else {
-            null
-        }
+        val video = box.selectFirst(".box-video > video > source") ?: return null
+        return video.absUrl("src")
     }
 
     private fun parseAuthor(box: Element): String? {
-        val metaText = box.getElementsByClass("objectMeta").first().text()
+        val metaText = box.selectFirst(".objectMeta").text()
         val authorMatcher = AUTHOR_EXTRACTOR.matcher(metaText)
         return if (authorMatcher.find()) {
             authorMatcher.group(1)
@@ -139,7 +127,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
     }
 
     private fun parsePublishDateTime(box: Element): LocalDateTime? {
-        val metaText = box.getElementsByClass("objectMeta").first().text()
+        val metaText = box.selectFirst(".objectMeta").text()
         val dateTimeMatcher = DATE_EXTRACTOR.matcher(metaText)
         return if (dateTimeMatcher.find()) {
             val dateStr = dateTimeMatcher.group(1)
