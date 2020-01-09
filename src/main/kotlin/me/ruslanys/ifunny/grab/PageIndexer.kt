@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class PageIndexer(
-        grabProperties: GrabProperties,
         restTemplateBuilder: RestTemplateBuilder,
+        grabProperties: GrabProperties,
         private val eventPublisher: ApplicationEventPublisher,
         private val memeService: MemeService
 ) {

@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Memes deduplication
 - S3 Integration
 - Yatahonga.com channel
+- Rigolotes.fr channel
 - Lachschon.de channel
 - Funpot.net channel
 - Debeste.de channel

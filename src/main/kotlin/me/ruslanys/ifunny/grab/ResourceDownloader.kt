@@ -24,11 +24,11 @@ import javax.imageio.ImageIO
 
 @Component
 class ResourceDownloader(
-        grabProperties: GrabProperties,
         restTemplateBuilder: RestTemplateBuilder,
-        private val s3Properties: AwsS3Properties,
+        grabProperties: GrabProperties,
         private val s3Client: S3Client,
-        private val memeService: MemeService
+        private val memeService: MemeService,
+        private val s3Properties: AwsS3Properties
 ) {
 
     private val hasher = AverageHash(64)

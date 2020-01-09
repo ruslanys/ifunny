@@ -5,7 +5,6 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ValueOperations
 import org.springframework.stereotype.Repository
 import java.time.Duration
-import java.util.concurrent.TimeUnit
 
 @Repository
 class PageRepository(private val redisTemplate: RedisTemplate<String, Any>) {
@@ -29,7 +28,7 @@ class PageRepository(private val redisTemplate: RedisTemplate<String, Any>) {
 
     fun setLast(channel: Channel, pageNumber: Int, retention: Duration) {
         val key = lastKey(channel)
-        valueOperations.setIfAbsent(key, pageNumber, retention.toSeconds(), TimeUnit.SECONDS)
+        valueOperations.setIfAbsent(key, pageNumber, retention)
     }
 
     fun clearCurrent(channel: Channel) {
