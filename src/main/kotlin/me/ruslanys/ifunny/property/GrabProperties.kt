@@ -12,7 +12,7 @@ data class GrabProperties(
 ) {
 
     data class Retention(
-            val fullIndex: Duration = Duration.ofDays(1)
+            val fullIndex: Duration = Duration.ofDays(7)
     )
 
 }
