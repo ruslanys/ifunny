@@ -163,7 +163,7 @@
                 }
             },
             methods: {
-                getPage: function () {
+                loadPage: function () {
                     this.isLoading = true;
 
                     axios
@@ -181,7 +181,7 @@
                 },
                 loadNextPage: function () {
                     this.params.offset += this.params.limit;
-                    this.getPage()
+                    this.loadPage()
                 },
                 handleScroll: function (event) {
                     // Lazy loading
@@ -202,7 +202,11 @@
                     this.feed = [];
                     this.params.offset = 0;
                     this.theEndReached = false;
-                    this.getPage();
+
+                    localStorage.setItem("language", this.params.language);
+                    localStorage.setItem("sortBy", this.params.sortBy);
+
+                    this.loadPage();
                 }
             },
             created: function () {
@@ -212,7 +216,17 @@
                 window.removeEventListener('scroll', this.handleScroll);
             },
             mounted: function () {
-                this.getPage()
+                let storageLanguage = localStorage.getItem("language");
+                let storageSortBy = localStorage.getItem("sortBy");
+
+                if (storageLanguage) {
+                    this.params.language = storageLanguage;
+                }
+                if (storageSortBy) {
+                    this.params.sortBy = storageSortBy;
+                }
+
+                this.loadPage()
             },
             filters: {
                 formatDate: function (value) {
