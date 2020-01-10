@@ -277,15 +277,14 @@ tradeoff.
 Увы, но на это все времени уже совсем нет времени.
 
 ```mermaid
-graph TB
+graph LR
     PI[Page Indexation] --> MI[Meme Indexation]
     MI --> DR(Download Resource)
-    DR -->|Video| VT(Make Thumbnail)
-    VT --> D
-    DR -->|Picture| D(Deduplication)
-    D -.-> |Video|VC(Convert)
-    VC --> P
-    D -.->|Picture|P[Publish]
+    DR -->|Video| VT(Thumbnails)
+    VT --> VC(Convertation)
+    VC --> D
+    DR -->|Picture| D[Deduplication]
+    D -.->P[Publish]
 
     style PI fill:#DAE8FC,stroke:#6C8EBF
     style MI fill:#DAE8FC,stroke:#6C8EBF
