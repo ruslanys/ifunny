@@ -277,7 +277,7 @@ tradeoff.
 Увы, но на это все времени уже совсем нет времени.
 
 ```mermaid
-graph LR
+graph TB
     PI[Page Indexation] --> MI[Meme Indexation]
     MI --> DR(Download Resource)
     DR -->|Video| VT(Thumbnails)
