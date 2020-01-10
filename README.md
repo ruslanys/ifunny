@@ -278,19 +278,23 @@ tradeoff.
 
 ```mermaid
 graph TB
-    PI[Page Indexation] --> MI[Meme Indexation]
-    MI --> DR(Download Resource)
-    DR -->|Video| VT(Thumbnails)
-    VT --> VC(Convertation)
-    VC --> D
-    DR -->|Picture| D[Deduplication]
-    D -.->P[Publish]
-
+    PI[Page Indexation] --> MI
+    MI[Meme Indexation] --> DR
+    DR(Download Resource) -->|Video| VT
+    VT(Thumbnails) --> VC
+    VC(Convertation) --> D
+    DR -->|Picture| IC
+    IC(Crop watermark) -->IT
+    IT(Thumbnails) --> D
+    D[Deduplication] -.-> P
+    P[Publish]
     style PI fill:#DAE8FC,stroke:#6C8EBF
     style MI fill:#DAE8FC,stroke:#6C8EBF
     style DR fill:#FFE6CC,stroke:#D79B00
     style VT fill:#FFF2CC,stroke:#D6B656
     style VC fill:#FFF2CC,stroke:#D6B656
+    style IT fill:#FFF2CC,stroke:#D6B656
+    style IC fill:#FFF2CC,stroke:#D6B656
     style D fill:#FFE6CC,stroke:#D79B00
     style P fill:#D5E8D4,stroke:#82B366
 ```
