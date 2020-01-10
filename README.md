@@ -288,6 +288,7 @@ graph TB
     IT(Thumbnails) --> D
     D[Deduplication] -.-> P
     P[Publish]
+
     style PI fill:#DAE8FC,stroke:#6C8EBF
     style MI fill:#DAE8FC,stroke:#6C8EBF
     style DR fill:#FFE6CC,stroke:#D79B00
