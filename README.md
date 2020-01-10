@@ -137,6 +137,10 @@ Swagger Open API v3 Specification: `/v3/api-docs`.
 
 Swagger UI: `/swagger-ui.html`.
 
+### Prometheus
+
+Metrics endpoint: `/actuator/prometheus`.
+
 ## Реализация
 
 ### Версионирование
