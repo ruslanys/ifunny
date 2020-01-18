@@ -1,14 +1,16 @@
 package me.ruslanys.ifunny.config
 
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newFixedThreadPoolContext
 import me.ruslanys.ifunny.Application
 import me.ruslanys.ifunny.grab.SuspendedEventListener
 import me.ruslanys.ifunny.grab.event.GrabEvent
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Configuration
+import java.util.concurrent.Executors
 import javax.annotation.PostConstruct
 import kotlin.math.max
 import kotlin.reflect.full.isSubtypeOf
@@ -24,12 +26,13 @@ class EventListenersConfig(
         listener::class.supertypes.first { it.isSubtypeOf(SuspendedEventListener::class.starProjectedType) }.arguments[0].type
     }
 
+    @ObsoleteCoroutinesApi
     @PostConstruct
     fun initCoroutines() = GlobalScope.launch {
         val threadsNumber = max(Runtime.getRuntime().availableProcessors(), 8)
         val coroutinesNumber = threadsNumber * 2
 
-        val workerContext = newFixedThreadPoolContext(threadsNumber, "worker")
+        val workerContext = Executors.newFixedThreadPool(threadsNumber).asCoroutineDispatcher()
 
         repeat(coroutinesNumber) {
             launch(workerContext) {
@@ -42,6 +45,7 @@ class EventListenersConfig(
         for (event in eventChannel) {
             listeners[event::class.starProjectedType]?.forEach {
                 try {
+                    @Suppress("UNCHECKED_CAST")
                     (it as SuspendedEventListener<Any>).handleEvent(event)
                 } catch (ex: Exception) {
                     log.error("Unexpected exception occurred invoking listener: ${it::class}, with event: $event", ex)
