@@ -1,47 +1,45 @@
 package me.ruslanys.ifunny.channel
 
+import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactive.awaitSingle
 import me.ruslanys.ifunny.domain.Language
-import me.ruslanys.ifunny.property.GrabProperties
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import org.springframework.boot.web.client.RestTemplateBuilder
-import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.core.ValueOperations
+import org.springframework.data.redis.core.ReactiveRedisTemplate
+import org.springframework.data.redis.core.ReactiveValueOperations
 import org.springframework.stereotype.Component
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.awaitBody
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Component
 class RigolotesChannel(
-        restTemplateBuilder: RestTemplateBuilder,
-        grabProperties: GrabProperties,
-        redisTemplate: RedisTemplate<String, Any>
+        redisTemplate: ReactiveRedisTemplate<String, Any>,
+        private val webClient: WebClient
 ) : Channel(Language.FRENCH, "https://rigolotes.fr") {
 
-    private val valueOperations: ValueOperations<String, Any> = redisTemplate.opsForValue()
-    private val restTemplate = restTemplateBuilder
-            .defaultHeader("User-Agent", grabProperties.userAgent)
-            .build()
+    private val valueOperations: ReactiveValueOperations<String, Any> = redisTemplate.opsForValue()
 
-    override fun pagePath(pageNumber: Int): String = synchronized(this) {
+    override suspend fun pagePath(pageNumber: Int): String {
         val pages = getPagesNumber() ?: fetchPagesNumber()
         val current = pages - (pageNumber - 1)
 
         return "$baseUrl/page/$current"
     }
 
-    private fun getPagesNumber(): Int? {
-        return valueOperations[pagesKey()] as Int?
+    private suspend fun getPagesNumber(): Int? {
+        return valueOperations[pagesKey()].awaitFirstOrNull() as Int?
     }
 
-    private fun fetchPagesNumber(): Int {
-        val body = restTemplate.getForObject(baseUrl, String::class.java)!!
+    private suspend fun fetchPagesNumber(): Int {
+        val body = webClient.get().uri(baseUrl).retrieve().awaitBody<String>()
         val document = Jsoup.parse(body)
         val current = document.selectFirst("div.page-numbers > a.font-weight-bold").text()
         val pages = current.toInt()
 
-        valueOperations.setIfAbsent(pagesKey(), pages, Duration.ofHours(1))
+        valueOperations.setIfAbsent(pagesKey(), pages, Duration.ofHours(1)).awaitSingle()
 
         return pages
     }

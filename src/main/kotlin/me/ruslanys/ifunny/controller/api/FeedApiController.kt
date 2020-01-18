@@ -18,14 +18,14 @@ import javax.validation.constraints.NotNull
 class FeedApiController(private val memeService: MemeService) {
 
     @GetMapping
-    fun getPage(@Valid searchRequest: FeedSearchRequest, @Valid pageRequest: FeedPageRequest): PageResponse<MemeDto> {
+    suspend fun getPage(@Valid searchRequest: FeedSearchRequest, @Valid pageRequest: FeedPageRequest): PageResponse<MemeDto> {
         val language = Language.findByCode(searchRequest.language!!)
         val page = memeService.getPage(language, pageRequest).map { MemeDto(it) }
         return PageResponse(page)
     }
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable("id") id: String): MemeDto {
+    suspend fun getById(@PathVariable("id") id: String): MemeDto {
         val meme = memeService.getById(id)
         return MemeDto(meme)
     }

@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 @Component
 class FunpotChannel : Channel(Language.GERMAN, "https://funpot.net") {
 
-    override fun pagePath(pageNumber: Int): String = "$baseUrl/entdecken/lustiges/$pageNumber/"
+    override suspend fun pagePath(pageNumber: Int): String = "$baseUrl/entdecken/lustiges/$pageNumber/"
 
     override fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body)

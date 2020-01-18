@@ -2,7 +2,9 @@ package me.ruslanys.ifunny.controller.api
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
+import kotlinx.coroutines.runBlocking
 import me.ruslanys.ifunny.base.ControllerTests
+import me.ruslanys.ifunny.controller.GlobalExceptionHandler
 import me.ruslanys.ifunny.domain.Language
 import me.ruslanys.ifunny.domain.Meme
 import me.ruslanys.ifunny.exception.NotFoundException
@@ -11,16 +13,14 @@ import me.ruslanys.ifunny.util.createDummyFile
 import me.ruslanys.ifunny.util.createDummyMeme
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Sort
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 
-@WebMvcTest(FeedApiController::class)
+@WebFluxTest(FeedApiController::class, GlobalExceptionHandler::class)
 class FeedApiControllerTests : ControllerTests() {
 
     @MockBean
@@ -29,42 +29,54 @@ class FeedApiControllerTests : ControllerTests() {
 
     @Test
     fun postMethodShouldNotBeAllowedToGetPage() {
-        mvc.perform(post("/api/feed"))
-                .andExpect(status().isMethodNotAllowed)
+        webClient.post()
+                .uri("/api/feed")
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
     }
 
     @Test
     fun getPageWithoutSpecifiedLanguageShouldReturn400() {
-        mvc.perform(get("/api/feed"))
-                .andExpect(status().isBadRequest)
+        webClient.get()
+                .uri("/api/feed")
+                .exchange()
+                .expectStatus().isBadRequest
     }
 
     @Test
     fun getPageWithWrongLanguageCodeShouldReturn400() {
-        mvc.perform(get("/api/feed?language=ch"))
-                .andExpect(status().isBadRequest)
+        webClient.get()
+                .uri("/api/feed?language=ch")
+                .exchange()
+                .expectStatus().isBadRequest
     }
 
     @Test
     fun getPageWithWrongOffsetShouldReturn400() {
-        mvc.perform(get("/api/feed?language=de&offset=-1"))
-                .andExpect(status().isBadRequest)
+        webClient.get()
+                .uri("/api/feed?language=de&offset=-1")
+                .exchange()
+                .expectStatus().isBadRequest
     }
 
     @Test
     fun getPageWithWrongLimitShouldReturn400() {
-        mvc.perform(get("/api/feed?language=de&limit=101"))
-                .andExpect(status().isBadRequest)
+        webClient.get()
+                .uri("/api/feed?language=de&limit=101")
+                .exchange()
+                .expectStatus().isBadRequest
     }
 
     @Test
     fun getPageWithRestrictedSortingShouldReturn400() {
-        mvc.perform(get("/api/feed?language=de&sortBy=author"))
-                .andExpect(status().isBadRequest)
+        webClient.get()
+                .uri("/api/feed?language=de&sortBy=author")
+                .exchange()
+                .expectStatus().isBadRequest
     }
 
     @Test
-    fun getPageWithProperParametersShouldReturnPageResponse() {
+    fun getPageWithProperParametersShouldReturnPageResponse() = runBlocking<Unit> {
         val memes = listOf(
                 createDummyMeme(title = "Title 1", file = createDummyFile(name = "1.jpg"), id = ObjectId("5e107cc18b12145d4624f23c")),
                 createDummyMeme(title = "Title 2", file = createDummyFile(name = "2.jpg"), id = ObjectId("5e107cc18b12145d4624f23d")),
@@ -80,38 +92,54 @@ class FeedApiControllerTests : ControllerTests() {
         given(memeService.getPage(Language.GERMAN, pageRequest)).willReturn(PageImpl<Meme>(memes))
 
         // --
-        val json = javaClass.getResourceAsStream("feed_getPage.json").bufferedReader().use { it.readText() }
+        val json = FeedApiControllerTests::class.java.getResourceAsStream("feed_getPage.json").bufferedReader().use { it.readText() }
 
         // --
-        mvc.perform(get("/api/feed")
-                .queryParam("language", "de")
-                .queryParam("offset", "10")
-                .queryParam("limit", "5")
-                .queryParam("sortBy", "likes")
-                .queryParam("sortDirection", "DESC"))
+        webClient.get()
+                .uri {
+                    it.path("/api/feed")
+                            .queryParam("language", "de")
+                            .queryParam("offset", "10")
+                            .queryParam("limit", "5")
+                            .queryParam("sortBy", "likes")
+                            .queryParam("sortDirection", "DESC")
+                            .build()
+                }
 
-                .andExpect(status().isOk)
-                .andExpect(content().json(json))
+                .exchange()
+                .expectStatus().isOk
+                .expectBody().json(json)
     }
 
     @Test
-    fun getByIdShouldReturn404() {
-        given(memeService.getById(any())).willThrow(NotFoundException::class.java)
+    fun getByIdShouldReturn404() = runBlocking<Unit> {
+        given(memeService.getById(any())).willThrow(NotFoundException("Not Found"))
 
-        mvc.perform(get("/api/feed/123"))
-                .andExpect(status().isNotFound)
+        webClient.get()
+                .uri("/api/feed/123")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isNotFound
+                .expectBody().json("""
+                    {
+                        "status": 404,
+                        "error": "Not Found"
+                    }
+                """.trimIndent())
     }
 
     @Test
-    fun getByIdShouldReturnMemeDto() {
+    fun getByIdShouldReturnMemeDto() = runBlocking<Unit> {
         val meme = createDummyMeme(id = ObjectId("5e107cc18b12145d4624f23c"))
         given(memeService.getById("321")).willReturn(meme)
 
-        val json = javaClass.getResourceAsStream("feed_getById.json").bufferedReader().use { it.readText() }
+        val json = FeedApiControllerTests::class.java.getResourceAsStream("feed_getById.json").bufferedReader().use { it.readText() }
 
-        mvc.perform(get("/api/feed/321"))
-                .andExpect(status().isOk)
-                .andExpect(content().json(json))
+        webClient.get()
+                .uri("/api/feed/321")
+                .exchange()
+                .expectStatus().isOk
+                .expectBody().json(json)
     }
 
 }

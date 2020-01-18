@@ -1,36 +1,39 @@
 package me.ruslanys.ifunny.grab
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.awaitFirstOrNull
+import kotlinx.coroutines.reactive.awaitSingle
 import me.ruslanys.ifunny.channel.Channel
+import me.ruslanys.ifunny.grab.event.GrabEvent
 import me.ruslanys.ifunny.grab.event.PageIndexRequest
-import me.ruslanys.ifunny.grab.event.PageIndexedEvent
+import me.ruslanys.ifunny.grab.event.PageIndexSuccessful
 import me.ruslanys.ifunny.property.GrabProperties
 import me.ruslanys.ifunny.repository.PageRepository
 import org.slf4j.LoggerFactory
-import org.springframework.context.ApplicationEventPublisher
-import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
 class Coordinator(
         private val channels: List<Channel>,
-        private val eventPublisher: ApplicationEventPublisher,
+        private val eventChannel: SendChannel<GrabEvent>,
         private val pageRepository: PageRepository,
         private val grabProperties: GrabProperties
-) {
+) : SuspendedEventListener<PageIndexSuccessful> {
 
-    @Scheduled(fixedRate = 3600_000)
-    fun initializeGrabbing() {
+    @Scheduled(initialDelay = 10_000, fixedDelay = 3600_000)
+    fun scheduleGrabbing() = GlobalScope.launch {
         for (channel in channels) {
             nextPageIndexRequest(channel)
         }
     }
 
-    @EventListener
-    fun onIndexedPage(event: PageIndexedEvent) {
+    override suspend fun handleEvent(event: PageIndexSuccessful) {
         log.info("Page #{} from {} has been processed", event.page.number, event.channel.getName())
 
-        val isChannelIndexed = pageRepository.getLast(event.channel) != null
+        val isChannelIndexed = pageRepository.getLast(event.channel).awaitFirstOrNull() != null
 
         if (!isChannelIndexed) {
             handleForNotIndexedChannel(event)
@@ -42,15 +45,15 @@ class Coordinator(
     /**
      * Next page indexation request.
      */
-    private fun nextPageIndexRequest(channel: Channel) {
-        val pageNumber = pageRepository.incCurrent(channel)
-        eventPublisher.publishEvent(PageIndexRequest(channel, pageNumber))
+    private suspend fun nextPageIndexRequest(channel: Channel) {
+        val pageNumber = pageRepository.incCurrent(channel).awaitSingle()
+        eventChannel.send(PageIndexRequest(channel, pageNumber))
     }
 
     /**
      * Handle success page indexation event when the channel not fully indexed yet.
      */
-    private fun handleForNotIndexedChannel(event: PageIndexedEvent) {
+    private suspend fun handleForNotIndexedChannel(event: PageIndexSuccessful) {
         val channel = event.channel
 
         if (event.page.hasNext) {
@@ -58,8 +61,8 @@ class Coordinator(
             nextPageIndexRequest(channel)
         } else {
             // The end reached
-            pageRepository.setLast(channel, event.page.number, grabProperties.retention.fullIndex)
-            pageRepository.clearCurrent(channel)
+            pageRepository.setLast(channel, event.page.number, grabProperties.retention.fullIndex).awaitSingle()
+            pageRepository.clearCurrent(channel).awaitSingle()
 
             log.info("{} fully indexed.", channel.getName())
         }
@@ -68,13 +71,13 @@ class Coordinator(
     /**
      * Handle success page indexation event when the channel already fully indexed.
      */
-    private fun handleForIndexedChannel(event: PageIndexedEvent) {
+    private suspend fun handleForIndexedChannel(event: PageIndexSuccessful) {
         val channel = event.channel
 
         if (event.page.hasNext && event.new > 0) {
             nextPageIndexRequest(channel)
         } else {
-            pageRepository.clearCurrent(channel)
+            pageRepository.clearCurrent(channel).awaitSingle()
 
             log.info("{} new pages from {} indexed.", event.page.number, event.channel.getName())
         }

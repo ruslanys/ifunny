@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 @Component
 class LachschonChannel : Channel(Language.GERMAN, "https://www.lachschon.de") {
 
-    override fun pagePath(pageNumber: Int): String {
+    override suspend fun pagePath(pageNumber: Int): String {
         return "$baseUrl/?set_gallery_type=image&page=$pageNumber"
     }
 
@@ -51,9 +51,7 @@ class LachschonChannel : Channel(Language.GERMAN, "https://www.lachschon.de") {
     }
 
     private fun parseAuthor(box: Element): String {
-        val element = box.select("a.username").firstOrNull() ?:
-                box.select("span.username_guest").first()
-
+        val element = box.select("a.username").firstOrNull() ?: box.select("span.username_guest").first()
         return element.text()
     }
 

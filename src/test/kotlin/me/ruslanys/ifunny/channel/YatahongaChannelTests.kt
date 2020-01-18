@@ -1,6 +1,7 @@
 package me.ruslanys.ifunny.channel
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -10,13 +11,13 @@ class YatahongaChannelTests {
     private val channel = YatahongaChannel(jacksonObjectMapper())
 
     @Test
-    fun firstPagePathTest() {
+    fun firstPagePathTest() = runBlocking<Unit> {
         val pagePath = channel.pagePath(1)
-        assertThat(pagePath).isEqualTo("https://www.yatahonga.com/nouveautes/p1/")
+        assertThat(pagePath).isEqualTo("https://www.yatahonga.com/nouveautes/")
     }
 
     @Test
-    fun hundredPagePathTest() {
+    fun hundredPagePathTest() = runBlocking<Unit> {
         val pagePath = channel.pagePath(100)
         assertThat(pagePath).isEqualTo("https://www.yatahonga.com/nouveautes/p100/")
     }

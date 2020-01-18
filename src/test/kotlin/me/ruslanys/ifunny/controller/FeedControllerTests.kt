@@ -2,72 +2,73 @@ package me.ruslanys.ifunny.controller
 
 import me.ruslanys.ifunny.base.ControllerTests
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 
-@WebMvcTest(FeedController::class)
+@WebFluxTest(FeedController::class)
 class FeedControllerTests : ControllerTests() {
 
     @Test
     fun indexHtmlShouldReturnFeedFrontend() {
-        mvc.perform(get("/index.html"))
-
-                .andExpect(status().isOk)
-                .andExpect(header().string("Content-Type", "text/html;charset=UTF-8"))
-                .andExpect(view().name("feed"))
+        webClient.get()
+                .uri("/index.html")
+                .exchange()
+                .expectStatus().isOk
+                .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML)
     }
 
     @Test
     fun indexHtmShouldReturnFeedFrontend() {
-        mvc.perform(get("/index.htm"))
-
-                .andExpect(status().isOk)
-                .andExpect(header().string("Content-Type", "text/html;charset=UTF-8"))
-                .andExpect(view().name("feed"))
+        webClient.get()
+                .uri("/index.htm")
+                .exchange()
+                .expectStatus().isOk
+                .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML)
     }
 
     @Test
     fun indexShouldReturnFeedFrontend() {
-        mvc.perform(get("/index"))
-
-                .andExpect(status().isOk)
-                .andExpect(header().string("Content-Type", "text/html;charset=UTF-8"))
-                .andExpect(view().name("feed"))
+        webClient.get()
+                .uri("/index")
+                .exchange()
+                .expectStatus().isOk
+                .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML)
     }
 
     @Test
-    fun emptyPathShouldReturnFeedFrontend() {
-        mvc.perform(get("/"))
-
-                .andExpect(status().isOk)
-                .andExpect(header().string("Content-Type", "text/html;charset=UTF-8"))
-                .andExpect(view().name("feed"))
+    fun rootShouldReturnFeedFrontend() {
+        webClient.get()
+                .uri("/")
+                .exchange()
+                .expectStatus().isOk
+                .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML)
     }
 
     @Test
     fun feedShouldReturnFeedFrontend() {
-        mvc.perform(get("/feed"))
-
-                .andExpect(status().isOk)
-                .andExpect(header().string("Content-Type", "text/html;charset=UTF-8"))
-                .andExpect(view().name("feed"))
+        webClient.get()
+                .uri("/feed")
+                .exchange()
+                .expectStatus().isOk
+                .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML)
     }
 
     @Test
     fun feedHtmlShouldReturnFeedFrontend() {
-        mvc.perform(get("/feed.html"))
-
-                .andExpect(status().isOk)
-                .andExpect(header().string("Content-Type", "text/html;charset=UTF-8"))
-                .andExpect(view().name("feed"))
+        webClient.get()
+                .uri("/feed.html")
+                .exchange()
+                .expectStatus().isOk
+                .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML)
     }
 
     @Test
     fun postRequestShouldNotBeAllowed() {
-        mvc.perform(post("/feed.html"))
-                .andExpect(status().isMethodNotAllowed)
+        webClient.post()
+                .uri("/feed.html")
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
     }
 
 }

@@ -23,12 +23,12 @@ class MemeRepositoryTests : MongoRepositoryTests() {
 
     @AfterEach
     fun tearDown() {
-        repository.deleteAll()
+        repository.deleteAll().block()
     }
 
     @Test
     fun persistTest() {
-        val meme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 12, 12, 12, 12)))
+        val meme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 12, 12, 12, 12))).block()!!
 
         // --
         val memeFromDb = mongoTemplate.findById(meme.id, Meme::class.java)
@@ -43,26 +43,30 @@ class MemeRepositoryTests : MongoRepositoryTests() {
         val firstMeme = createDummyMeme(pageUrl = UUID.randomUUID().toString())
         val secondMeme = createDummyMeme(pageUrl = firstMeme.pageUrl)
 
-        repository.save(firstMeme)
+        repository.save(firstMeme).block()
 
         assertThrows<DuplicateKeyException> {
-            repository.save(secondMeme)
+            repository.save(secondMeme).block()
         }
     }
 
     @Test
     fun findByLanguageTest() {
         for (i in 1..30) {
-            repository.save(createDummyMeme(language = Language.PORTUGUESE))
+            repository.save(createDummyMeme(language = Language.PORTUGUESE)).block()
         }
-        repository.save(createDummyMeme(language = Language.RUSSIAN))
+        repository.save(createDummyMeme(language = Language.RUSSIAN)).block()
 
         // --
-        val page = repository.findByLanguage(Language.PORTUGUESE.code, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id")))
+        val list = repository.findByLanguage(Language.PORTUGUESE.code, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id")))
+                .collectList()
+                .block()!!
+
+        val count = repository.countByLanguage(Language.PORTUGUESE.code).block()!!
 
         // --
-        assertThat(page.totalElements).isEqualTo(30)
-        assertThat(page.content.size).isEqualTo(10)
+        assertThat(count).isEqualTo(30)
+        assertThat(list.size).isEqualTo(10)
     }
 
     @DisplayName("""
@@ -70,19 +74,22 @@ class MemeRepositoryTests : MongoRepositoryTests() {
     """)
     @Test
     fun sortByDateTest() {
-        val firstMeme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 1, 10, 0)))
-        val secondMeme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 2, 10, 0)))
-        val thirdMeme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 3, 10, 0)))
-        val emptyDateFirst = repository.save(createDummyMeme(publishDateTime = null))
-        val emptyDateSecond = repository.save(createDummyMeme(publishDateTime = null))
-        val emptyDateThird = repository.save(createDummyMeme(publishDateTime = null))
+        val firstMeme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 1, 10, 0))).block()
+        val secondMeme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 2, 10, 0))).block()
+        val thirdMeme = repository.save(createDummyMeme(publishDateTime = LocalDateTime.of(2019, 12, 3, 10, 0))).block()
+        val emptyDateFirst = repository.save(createDummyMeme(publishDateTime = null)).block()
+        val emptyDateSecond = repository.save(createDummyMeme(publishDateTime = null)).block()
+        val emptyDateThird = repository.save(createDummyMeme(publishDateTime = null)).block()
 
         // --
-        val page = repository.findByLanguage(Language.GERMAN.code, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "publishDateTime", "id")))
+        val count = repository.countByLanguage(Language.GERMAN.code).block()!!
+        val list = repository.findByLanguage(Language.GERMAN.code, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "publishDateTime", "id")))
+                .collectList()
+                .block()!!
 
         // --
-        assertThat(page.totalElements).isEqualTo(6)
-        assertThat(page.content).containsExactly(thirdMeme, secondMeme, firstMeme, emptyDateThird, emptyDateSecond, emptyDateFirst)
+        assertThat(count).isEqualTo(6)
+        assertThat(list).containsExactly(thirdMeme, secondMeme, firstMeme, emptyDateThird, emptyDateSecond, emptyDateFirst)
     }
 
     @Test
@@ -93,7 +100,7 @@ class MemeRepositoryTests : MongoRepositoryTests() {
         mongoTemplate.save(createDummyMeme(language = language, fingerprint = fingerprint))
 
         // --
-        val result = repository.existsByLanguageAndFingerprint(language.code, fingerprint)
+        val result = repository.existsByLanguageAndFingerprint(language.code, fingerprint).block()
 
         // --
         assertThat(result).isTrue()
@@ -106,7 +113,7 @@ class MemeRepositoryTests : MongoRepositoryTests() {
         mongoTemplate.save(createDummyMeme(language = Language.GERMAN, fingerprint = fingerprint))
 
         // --
-        val result = repository.existsByLanguageAndFingerprint(Language.RUSSIAN.code, fingerprint)
+        val result = repository.existsByLanguageAndFingerprint(Language.RUSSIAN.code, fingerprint).block()
 
         // --
         assertThat(result).isFalse()
@@ -119,7 +126,7 @@ class MemeRepositoryTests : MongoRepositoryTests() {
         mongoTemplate.save(createDummyMeme(language = language, fingerprint = "123"))
 
         // --
-        val result = repository.existsByLanguageAndFingerprint(language.code, "321")
+        val result = repository.existsByLanguageAndFingerprint(language.code, "321").block()
 
         // --
         assertThat(result).isFalse()
@@ -134,6 +141,8 @@ class MemeRepositoryTests : MongoRepositoryTests() {
 
         // --
         val result = repository.findByPageUrlIn(urls)
+                .collectList()
+                .block()!!
 
         // --
         assertThat(result).hasSize(urls.size)
