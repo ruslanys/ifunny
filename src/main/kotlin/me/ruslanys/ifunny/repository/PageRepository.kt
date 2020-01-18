@@ -1,39 +1,40 @@
 package me.ruslanys.ifunny.repository
 
 import me.ruslanys.ifunny.channel.Channel
-import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.core.ValueOperations
+import org.springframework.data.redis.core.ReactiveRedisTemplate
+import org.springframework.data.redis.core.ReactiveValueOperations
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
 import java.time.Duration
 
 @Repository
-class PageRepository(private val redisTemplate: RedisTemplate<String, Any>) {
+class PageRepository(private val redisTemplate: ReactiveRedisTemplate<String, Any>) {
 
-    private val valueOperations: ValueOperations<String, Any> = redisTemplate.opsForValue()
+    private val valueOperations: ReactiveValueOperations<String, Any> = redisTemplate.opsForValue()
 
-    fun getCurrent(channel: Channel): Int {
+    fun getCurrent(channel: Channel): Mono<Int> {
         val key = currentKey(channel)
-        return valueOperations[key] as Int? ?: 1
+        return valueOperations[key].defaultIfEmpty(1).map { it as Int }
     }
 
-    fun incCurrent(channel: Channel): Int {
+    fun incCurrent(channel: Channel): Mono<Int> {
         val key = currentKey(channel)
-        return valueOperations.increment(key)!!.toInt()
+        return valueOperations.increment(key).map { it.toInt() }
     }
 
-    fun getLast(channel: Channel): Int? {
+    fun getLast(channel: Channel): Mono<Int> {
         val key = lastKey(channel)
-        return valueOperations[key] as Int?
+        return valueOperations[key].map { it as Int }
     }
 
-    fun setLast(channel: Channel, pageNumber: Int, retention: Duration) {
+    fun setLast(channel: Channel, pageNumber: Int, retention: Duration): Mono<Boolean> {
         val key = lastKey(channel)
-        valueOperations.setIfAbsent(key, pageNumber, retention)
+        return valueOperations.setIfAbsent(key, pageNumber, retention)
     }
 
-    fun clearCurrent(channel: Channel) {
+    fun clearCurrent(channel: Channel): Mono<Long> {
         val key = currentKey(channel)
-        redisTemplate.delete(key)
+        return redisTemplate.delete(key)
     }
 
     private fun currentKey(channel: Channel): String {
@@ -45,10 +46,9 @@ class PageRepository(private val redisTemplate: RedisTemplate<String, Any>) {
     }
 
 
-
     companion object {
-        const val CURRENT_POSTFIX = "current"
-        const val LAST_POSTFIX = "last"
+        private const val CURRENT_POSTFIX = "current"
+        private const val LAST_POSTFIX = "last"
     }
 
 }

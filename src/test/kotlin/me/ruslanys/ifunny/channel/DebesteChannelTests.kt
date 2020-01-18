@@ -1,5 +1,6 @@
 package me.ruslanys.ifunny.channel
 
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -9,13 +10,13 @@ class DebesteChannelTests {
     private val channel = DebesteChannel()
 
     @Test
-    fun firstPagePathTest() {
+    fun firstPagePathTest() = runBlocking<Unit> {
         val pagePath = channel.pagePath(1)
         assertThat(pagePath).isEqualTo("http://debeste.de/1")
     }
 
     @Test
-    fun hundredPagePathTest() {
+    fun hundredPagePathTest() = runBlocking<Unit> {
         val pagePath = channel.pagePath(100)
         assertThat(pagePath).isEqualTo("http://debeste.de/100")
     }

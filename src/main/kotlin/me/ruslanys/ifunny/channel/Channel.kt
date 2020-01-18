@@ -21,7 +21,7 @@ abstract class Channel(val language: Language, val baseUrl: String) {
     /**
      * The method returns page URL based on the page number.
      */
-    abstract fun pagePath(pageNumber: Int): String
+    abstract suspend fun pagePath(pageNumber: Int): String
 
     /**
      * The method gets Page body and returns grabbed memes list.

@@ -1,0 +1,137 @@
+openapi: 3.0.2
+info:
+  title: iFunny API
+  version: 1.1.0
+  contact:
+    name: Ruslan Molchanov
+    email: me@ruslanys.me
+servers:
+  - url: /api
+    description: Local
+  - url: https://ifunny.ruslanys.me/api
+    description: Production
+paths:
+  '/feed/{ID}':
+    get:
+      tags:
+        - "Feed"
+      summary: "Get Meme by its ID"
+      operationId: "getById"
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Meme'
+        404:
+          description: "Meme with the specified ID not found"
+          content:
+            'text/plain'
+  '/feed':
+    get:
+      tags:
+        - "Feed"
+      operationId: "getPage"
+      parameters:
+        - name: language
+          in: query
+          description: Language code
+          required: true
+          schema:
+            type: string
+            enum:
+              - de
+              - fr
+              - es
+              - it
+              - pt
+              - ru
+        - name: offset
+          in: query
+          description: Pagination offset
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Pagination limit
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 200
+            default: 10
+        - name: sortBy
+          in: query
+          description: Sorting argument
+          schema:
+            type: string
+            enum:
+              - publishDateTime
+              - likes
+            default: publishDateTime
+        - name: sortDirection
+          description: Sorting direction
+          in: query
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: DESC
+      responses:
+        200:
+          description: Successful operation
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                    format: int64
+                  list:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Meme'
+        400:
+          description: Arguments validation constraint
+          content:
+            'text/plain'
+components:
+  schemas:
+    Meme:
+      type: object
+      properties:
+        id:
+          type: string
+        language:
+          type: string
+        channelName:
+          type: string
+        title:
+          type: string
+        url:
+          type: string
+        contentType:
+          type: string
+        publishDateTime:
+          type: string
+          format: date-time
+        author:
+          type: string
+        likes:
+          type: integer
+          format: int32
+        comments:
+          type: integer
+          format: int32

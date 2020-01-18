@@ -4,25 +4,28 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.runBlocking
 import me.ruslanys.ifunny.base.ServiceTests
 import me.ruslanys.ifunny.channel.DebesteChannel
 import me.ruslanys.ifunny.channel.FunpotChannel
 import me.ruslanys.ifunny.channel.Page
+import me.ruslanys.ifunny.grab.event.GrabEvent
 import me.ruslanys.ifunny.grab.event.PageIndexRequest
-import me.ruslanys.ifunny.grab.event.PageIndexedEvent
+import me.ruslanys.ifunny.grab.event.PageIndexSuccessful
 import me.ruslanys.ifunny.property.GrabProperties
 import me.ruslanys.ifunny.repository.PageRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.mockito.Mock
-import org.springframework.context.ApplicationEventPublisher
+import reactor.core.publisher.Mono
 
 
 class CoordinatorTests : ServiceTests() {
 
     // @formatter:off
-    @Mock private lateinit var eventPublisher: ApplicationEventPublisher
+    @Mock private lateinit var eventChannel: SendChannel<GrabEvent>
     @Mock private lateinit var pageRepository: PageRepository
     // @formatter:on
 
@@ -33,66 +36,87 @@ class CoordinatorTests : ServiceTests() {
 
     @BeforeEach
     fun setUp() {
-        coordinator = Coordinator(channels, eventPublisher, pageRepository, grabProperties)
+        coordinator = Coordinator(channels, eventChannel, pageRepository, grabProperties)
     }
 
     @Test
-    fun initializationShouldStartsWithTheFirstPagePerEachChannel() {
-        given(pageRepository.incCurrent(any())).willReturn(1)
+    fun scheduleGrabbingShouldStartWithTheFirstPagePerEachChannel() = runBlocking {
+        given(pageRepository.incCurrent(any())).willReturn(Mono.just(1))
 
-        // --
-        coordinator.initializeGrabbing()
-
-        // --
-        verify(eventPublisher, times(channels.size)).publishEvent(any<PageIndexRequest>())
+        coordinator.scheduleGrabbing().join()
+        verify(eventChannel, times(channels.size)).send(any<PageIndexRequest>())
     }
 
     @Test
-    fun `When a channel is not indexed and there is a next page`() {
-        given(pageRepository.getLast(any())).willReturn(null) // not indexed
-        given(pageRepository.incCurrent(any())).willReturn(5)
+    fun whileChannelIsNotIndexedItShouldContinueParsing() = runBlocking {
+        given(pageRepository.getLast(any())).willReturn(Mono.empty()) // not indexed
+        given(pageRepository.incCurrent(any())).willReturn(Mono.just(5))
 
-        // --
-        coordinator.onIndexedPage(PageIndexedEvent(channels.first(), Page(1, true, listOf()), 2))
+        coordinator.handleEvent(PageIndexSuccessful(channels.first(), Page(1, true, listOf()), 2))
+        verify(eventChannel).send(any<PageIndexRequest>())
 
-        // --
-        verify(eventPublisher).publishEvent(any<PageIndexRequest>())
     }
 
     @Test
-    fun `When a channel is not indexed and there is no next page`() {
-        given(pageRepository.getLast(any())).willReturn(null) // not indexed
+    fun whenChannelIsNotIndexedAndItReachesTheLastPageItShouldFinalizeTheState() = runBlocking {
+        given(pageRepository.getLast(any())).willReturn(Mono.empty()) // not indexed
+        given(pageRepository.setLast(any(), any(), any())).willReturn(Mono.just(true)) // Reactive stub
+        given(pageRepository.clearCurrent(any())).willReturn(Mono.just(1)) // Reactive stub
 
         // --
-        coordinator.onIndexedPage(PageIndexedEvent(channels.first(), Page(100, false, listOf()), 2))
+        coordinator.handleEvent(PageIndexSuccessful(channels.first(), Page(100, false, listOf()), 2))
 
         // --
         verify(pageRepository).setLast(channels.first(), 100, grabProperties.retention.fullIndex)
         verify(pageRepository).clearCurrent(channels.first())
-        verify(eventPublisher, never()).publishEvent(any())
+        verify(eventChannel, never()).send(any())
     }
 
     @Test
-    fun `When a channel is fully indexed it should index pages until it has new memes`() {
-        given(pageRepository.getLast(any())).willReturn(100) // indexed
-        given(pageRepository.incCurrent(any())).willReturn(5)
+    fun fullyIndexedChannelShouldBeParsedUntilItHasNewMemes() = runBlocking {
+        given(pageRepository.getLast(any())).willReturn(Mono.just(100)) // indexed
+        given(pageRepository.incCurrent(any())).willReturn(Mono.just(5))
 
         // --
-        coordinator.onIndexedPage(PageIndexedEvent(channels.first(), Page(100, true, listOf()), 1))
+        val hasNext = true
+        val new = 1
+
+        coordinator.handleEvent(PageIndexSuccessful(channels.first(), Page(100, hasNext, listOf()), new))
 
         // --
-        verify(eventPublisher).publishEvent(any<PageIndexRequest>())
+        verify(eventChannel).send(any<PageIndexRequest>())
     }
 
     @Test
-    fun `When a channel is fully indexed it should clear current page number when it has no new memes`() {
-        given(pageRepository.getLast(any())).willReturn(100) // indexed
+    fun fullyIndexedChannelShouldCleanThePositionWhenItReachesTheOldPage() = runBlocking {
+        given(pageRepository.getLast(any())).willReturn(Mono.just(100)) // indexed
+        given(pageRepository.clearCurrent(any())).willReturn(Mono.just(1)) // Reactive stub
 
         // --
-        coordinator.onIndexedPage(PageIndexedEvent(channels.first(), Page(100, true, listOf()), 0))
+        val hasNext = true
+        val new = 0
+
+        coordinator.handleEvent(PageIndexSuccessful(channels.first(), Page(100, hasNext, listOf()), new))
 
         // --
         verify(pageRepository).clearCurrent(channels.first())
+        verify(eventChannel, never()).send(any<PageIndexRequest>())
+    }
+
+    @Test
+    fun fullyIndexedChannelShouldCleanThePositionWhenItReachesTheLast() = runBlocking {
+        given(pageRepository.getLast(any())).willReturn(Mono.just(100)) // indexed
+        given(pageRepository.clearCurrent(any())).willReturn(Mono.just(1)) // Reactive stub
+
+        // --
+        val hasNext = false
+        val new = 1
+
+        coordinator.handleEvent(PageIndexSuccessful(channels.first(), Page(100, hasNext, listOf()), new))
+
+        // --
+        verify(pageRepository).clearCurrent(channels.first())
+        verify(eventChannel, never()).send(any<PageIndexRequest>())
     }
 
 }

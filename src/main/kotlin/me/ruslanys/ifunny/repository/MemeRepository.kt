@@ -1,18 +1,21 @@
 package me.ruslanys.ifunny.repository
 
 import me.ruslanys.ifunny.domain.Meme
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Repository
-interface MemeRepository : MongoRepository<Meme, String> {
+interface MemeRepository : ReactiveMongoRepository<Meme, String> {
 
-    fun findByLanguage(language: String, pageable: Pageable): Page<Meme>
+    fun findByLanguage(language: String, pageable: Pageable): Flux<Meme>
 
-    fun findByPageUrlIn(pageUrls: List<String>): List<Meme>
+    fun findByPageUrlIn(pageUrls: List<String>): Flux<Meme>
 
-    fun existsByLanguageAndFingerprint(language: String, fingerprint: String): Boolean
+    fun existsByLanguageAndFingerprint(language: String, fingerprint: String): Mono<Boolean>
+
+    fun countByLanguage(language: String): Mono<Long>
 
 }

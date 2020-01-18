@@ -10,4 +10,21 @@ data class MemeInfo(
         val likes: Int? = null,
         val comments: Int? = null,
         val author: String? = null
-)
+) {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as MemeInfo
+
+        if (pageUrl != other.pageUrl) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return pageUrl?.hashCode() ?: 0
+    }
+
+}

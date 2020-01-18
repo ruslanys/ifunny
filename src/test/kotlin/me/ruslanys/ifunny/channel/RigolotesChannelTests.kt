@@ -3,24 +3,25 @@ package me.ruslanys.ifunny.channel
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
-import me.ruslanys.ifunny.property.GrabProperties
+import kotlinx.coroutines.runBlocking
+import me.ruslanys.ifunny.util.mockGet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.boot.web.client.RestTemplateBuilder
-import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.core.ValueOperations
-import org.springframework.web.client.RestTemplate
+import org.springframework.core.io.ClassPathResource
+import org.springframework.data.redis.core.ReactiveRedisTemplate
+import org.springframework.data.redis.core.ReactiveValueOperations
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 import java.time.LocalDateTime
 
 class RigolotesChannelTests {
 
     // region Mocks
-    private val restTemplateBuilder: RestTemplateBuilder = mock()
-    private val restTemplate: RestTemplate = mock()
+    private val webClient: WebClient = mock()
 
-    private val redisTemplate: RedisTemplate<String, Any> = mock()
-    private val valueOperations: ValueOperations<String, Any> = mock()
+    private val redisTemplate: ReactiveRedisTemplate<String, Any> = mock()
+    private val valueOperations: ReactiveValueOperations<String, Any> = mock()
     // endregion
 
     private lateinit var channel: RigolotesChannel
@@ -28,37 +29,32 @@ class RigolotesChannelTests {
 
     @BeforeEach
     fun setUp() {
-        given(restTemplateBuilder.defaultHeader(any(), any())).willReturn(restTemplateBuilder)
-        given(restTemplateBuilder.build()).willReturn(restTemplate)
-
         given(redisTemplate.opsForValue()).willReturn(valueOperations)
 
-        channel = RigolotesChannel(restTemplateBuilder, GrabProperties(), redisTemplate)
+        channel = RigolotesChannel(redisTemplate, webClient)
     }
 
     @Test
-    fun firstPagePathTest() {
-        given(valueOperations["$channel:pages"]).willReturn(2000)
+    fun firstPagePathTest() = runBlocking<Unit> {
+        given(valueOperations["$channel:pages"]).willReturn(Mono.just(2000))
 
         val pagePath = channel.pagePath(1)
         assertThat(pagePath).isEqualTo("https://rigolotes.fr/page/2000")
     }
 
     @Test
-    fun hundredPagePathTest() {
-        given(valueOperations["$channel:pages"]).willReturn(2000)
+    fun hundredPagePathTest() = runBlocking<Unit> {
+        given(valueOperations["$channel:pages"]).willReturn(Mono.just(2000))
 
         val pagePath = channel.pagePath(100)
         assertThat(pagePath).isEqualTo("https://rigolotes.fr/page/1901")
     }
 
     @Test
-    fun fetchPageTest() {
-        val html = javaClass.getResourceAsStream("rigolotes/page.html").bufferedReader().use {
-            it.readText()
-        }
-        given(restTemplate.getForObject(any<String>(), any<Class<*>>())).willReturn(html)
-        given(valueOperations["$channel:pages"]).willReturn(null)
+    fun fetchPageTest() = runBlocking<Unit> {
+        given(valueOperations["$channel:pages"]).willReturn(Mono.justOrEmpty(null))
+        given(valueOperations.setIfAbsent(any(), any(), any())).willReturn(Mono.just(true))
+        mockGet(webClient, channel.baseUrl, ClassPathResource("rigolotes/page.html", RigolotesChannelTests::class.java))
 
         val pagePath = channel.pagePath(1)
         assertThat(pagePath).isEqualTo("https://rigolotes.fr/page/1786")

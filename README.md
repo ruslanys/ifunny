@@ -143,9 +143,13 @@ $ docker-compose up -d
 
 ### Swagger
 
-Swagger Open API v3 Specification: `/v3/api-docs`.
+Swagger Open API v3 Specification: `/contract.yaml`.
 
 Swagger UI: `/swagger-ui.html`.
+
+Можно было бы прикрутить Springdoc (Springfox), как и было в первой версии, который бы сам генерировал спецификацию API
+из описанных контроллеров, однако я считаю, что лучшее качество у спецификации, описанной человеком.
+Если уж не говорить про подход Contract-first, где перед реализацией сначала описывается контракт.
 
 ### Prometheus
 

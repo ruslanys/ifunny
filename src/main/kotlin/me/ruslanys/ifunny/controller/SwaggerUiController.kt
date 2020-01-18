@@ -8,7 +8,7 @@ class SwaggerUiController {
 
     @GetMapping("/swagger-ui", "/swagger-ui.html")
     fun swaggerUi(): String {
-        return "redirect:/webjars/swagger-ui/3.24.3/index.html?url=/v3/api-docs"
+        return "redirect:/swagger-ui/index.html"
     }
 
 }

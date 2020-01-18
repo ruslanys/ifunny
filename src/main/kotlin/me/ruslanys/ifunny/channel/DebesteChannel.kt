@@ -11,7 +11,7 @@ import java.util.regex.Pattern
 @Component
 class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
 
-    override fun pagePath(pageNumber: Int): String = "$baseUrl/$pageNumber"
+    override suspend fun pagePath(pageNumber: Int): String = "$baseUrl/$pageNumber"
 
     override fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body)

@@ -12,8 +12,12 @@ import java.time.format.DateTimeFormatter
 @Component
 class YatahongaChannel(private val objectMapper: ObjectMapper) : Channel(Language.FRENCH, "https://www.yatahonga.com") {
 
-    override fun pagePath(pageNumber: Int): String {
-        return "$baseUrl/nouveautes/p${pageNumber}/"
+    override suspend fun pagePath(pageNumber: Int): String {
+        return if (pageNumber == 1) {
+            "$baseUrl/nouveautes/"
+        } else {
+            "$baseUrl/nouveautes/p${pageNumber}/"
+        }
     }
 
     override fun parsePage(pageNumber: Int, body: String): Page {

@@ -62,7 +62,7 @@ class CompoundHashTests {
     }
 
     private fun hashedResources(path: String): List<HashedResource> {
-        val resources  = RESOURCE_RESOLVER.getResources("$ROOT_DIRECTORY/$path/*")
+        val resources = RESOURCE_RESOLVER.getResources("$ROOT_DIRECTORY/$path/*")
         return resources.map {
             HashedResource(it, fastHasher.hash(it.file), accurateHasher.hash(it.file))
         }

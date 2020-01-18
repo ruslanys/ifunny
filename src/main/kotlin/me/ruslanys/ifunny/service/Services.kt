@@ -10,14 +10,14 @@ import org.springframework.data.domain.Pageable
 
 interface MemeService {
 
-    fun add(channel: Channel, info: MemeInfo, file: S3File, fingerprint: String?): Meme
+    suspend fun add(channel: Channel, info: MemeInfo, file: S3File, fingerprint: String?): Meme
 
-    fun isExists(language: Language, fingerprint: String): Boolean
+    suspend fun isExists(language: Language, fingerprint: String): Boolean
 
-    fun findByPageUrls(urls: List<String>): List<Meme>
+    suspend fun findByPageUrls(urls: List<String>): List<Meme>
 
-    fun getPage(language: Language, pageRequest: Pageable): Page<Meme>
+    suspend fun getPage(language: Language, pageRequest: Pageable): Page<Meme>
 
-    fun getById(id: String): Meme
+    suspend fun getById(id: String): Meme
 
 }
