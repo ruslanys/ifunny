@@ -1,7 +1,6 @@
 package me.ruslanys.ifunny.config
 
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -26,7 +25,6 @@ class EventListenersConfig(
         listener::class.supertypes.first { it.isSubtypeOf(SuspendedEventListener::class.starProjectedType) }.arguments[0].type
     }
 
-    @ObsoleteCoroutinesApi
     @PostConstruct
     fun initCoroutines() = GlobalScope.launch {
         val threadsNumber = max(Runtime.getRuntime().availableProcessors(), 8)
