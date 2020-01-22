@@ -124,5 +124,4 @@ deploy-production:
     name: production
     url: https://ifunny.ruslanys.me
   only:
-    - master
     - tags
