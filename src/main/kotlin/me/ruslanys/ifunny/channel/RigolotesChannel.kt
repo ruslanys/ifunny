@@ -98,7 +98,7 @@ class RigolotesChannel(
     }
 
     private fun parsePublishDateTime(box: Element): LocalDateTime {
-        val dateStr = box.select("div.info > span")[2].text()
+        val dateStr = box.select("div.info > span").last().text()
         return LocalDateTime.parse(dateStr, DATE_TIME_FORMATTER)
     }
 
