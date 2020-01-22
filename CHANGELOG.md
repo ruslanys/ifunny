@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2020-01-22
+### Fixed
+- Rigolotes channel changed its markup and broke pages parsing
+
 ## [2.0.0] - 2020-01-19
 ### Changed
 - Blocking IO changed with NIO
@@ -41,7 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitLab CI: Build job
 - GitLab CI: Package Docker image job
 
-[unreleased]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.0...HEAD
+[unreleased]: https://gitlab.com/ruslanys/ifunny/commpare/v2.0.1...HEAD
+[2.0.1]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.0...v2.0.1
 [2.0.0]: https://gitlab.com/ruslanys/ifunny/compare/v1.0.0...v2.0.0
 [1.0.0]: https://gitlab.com/ruslanys/ifunny/compare/v0.0.1...v1.0.0
 [0.0.1]: https://gitlab.com/ruslanys/ifunny/-/tags/v0.0.1
