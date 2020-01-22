@@ -93,7 +93,8 @@ class RigolotesChannel(
 
     private fun parseVotes(box: Element): Int {
         return box.selectFirst("div.votes > span.upvotes").text()
-                .split(" ")[1]
+                .replace("+", "") // remove plus sign
+                .replace(" ", "") // remove spaces
                 .toInt()
     }
 
