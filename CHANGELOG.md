@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.1] - 2020-01-22
 ### Fixed
-- Rigolotes channel changed its markup and broke pages parsing
+- Rigolotes channel changed its markup for publish date and broke pages parsing
 
 ## [2.0.0] - 2020-01-19
 ### Changed
