@@ -131,6 +131,20 @@ class RigolotesChannelTests {
     }
 
     @Test
+    fun parsePageWithUpdatedUpvotes() {
+        val html = javaClass.getResourceAsStream("rigolotes/page_broken_upvotes.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val page = channel.parsePage(1, html)
+        val list = page.memesInfo
+
+        // --
+        assertThat(list).hasSize(9) // minus negative
+    }
+
+    @Test
     fun parsePictureMeme() {
         val baseInfo = MemeInfo(
                 pageUrl = "https://rigolotes.fr/34696/hey-mec-t-es-juste-un-gros",
