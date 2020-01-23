@@ -2,7 +2,7 @@
 
 Сайт: https://ifunny.ruslanys.me 
 
-Задание: https://funcodechallenge.com/
+Задание: https://habr.com/ru/company/funcorp/blog/481814/
 
 ## Преамбула
 
