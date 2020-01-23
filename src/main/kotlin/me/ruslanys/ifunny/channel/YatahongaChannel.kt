@@ -27,9 +27,7 @@ class YatahongaChannel(private val objectMapper: ObjectMapper) : Channel(Languag
         val list = arrayListOf<MemeInfo>()
 
         for (article in articles) {
-            val header = parseHeader(article) ?: continue
-            val url = header.first
-            val title = header.second
+            val (url, title) = parseHeader(article) ?: continue
 
             val points = parsePoints(article)
             if (points < 0) {

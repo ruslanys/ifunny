@@ -57,9 +57,7 @@ class RigolotesChannel(
                 continue // skip youtube videos
             }
 
-            val header = parseHeader(box)
-            val url = header.first
-            val title = header.second
+            val (url, title) = parseHeader(box)
 
             val votes = parseVotes(box)
             if (votes < 0) {

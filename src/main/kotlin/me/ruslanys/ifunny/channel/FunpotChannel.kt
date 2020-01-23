@@ -26,9 +26,7 @@ class FunpotChannel : Channel(Language.GERMAN, "https://funpot.net") {
             }
 
             // Header
-            val header = parseHeader(box)
-            val url = header.first
-            val title = header.second
+            val (url, title) = parseHeader(box)
 
             // Likes
             val likes = parseLikes(box)

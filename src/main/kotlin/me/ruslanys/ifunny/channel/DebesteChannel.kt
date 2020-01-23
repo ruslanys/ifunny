@@ -26,9 +26,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
             }
 
             // Header
-            val header = parseHeader(box)
-            val url = header.first
-            val title = header.second
+            val (url, title) = parseHeader(box)
 
             if (url == "#") { // skip adv box
                 continue

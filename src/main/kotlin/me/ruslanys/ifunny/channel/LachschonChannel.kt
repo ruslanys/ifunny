@@ -21,9 +21,7 @@ class LachschonChannel : Channel(Language.GERMAN, "https://www.lachschon.de") {
         val list = arrayListOf<MemeInfo>()
 
         for (box in boxes) {
-            val header = parseHeader(box)
-            val url = header.first
-            val title = header.second
+            val (url, title) = parseHeader(box)
 
             val author = parseAuthor(box)
             val likes = parseLikes(box)
