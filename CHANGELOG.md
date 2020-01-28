@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.3] - 2020-01-28
+### Changed
+- Dockerfile `CMD` replaced with `ENTRYPOINT`
+- Dockerfile shell form replaced with exec form
+
 ## [2.0.2] - 2020-01-22
 ### Fixed
 - Rigolotes channel changed its markup for rating (votes) and broke pages parsing
@@ -49,7 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitLab CI: Build job
 - GitLab CI: Package Docker image job
 
-[unreleased]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.2...master
+[unreleased]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.3...master
+[2.0.3]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.2...v2.0.3
 [2.0.2]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.1...v2.0.2
 [2.0.1]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.0...v2.0.1
 [2.0.0]: https://gitlab.com/ruslanys/ifunny/compare/v1.0.0...v2.0.0
