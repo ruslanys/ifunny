@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="language" content="de">
+    <meta name="csrf-token" content="q4x6QtMKbfB0wngWJDzXVcrPSjgvmbJQSWieUfHO">
+
+    <title>Orschlurch - Hasser werden hassen!</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://static.orschlurch.net/common/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="https://static.orschlurch.net/css/style.css.php?v=0.42286100 1582104388&"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600|Ubuntu:500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.6.3/css/all.css"
+          integrity="sha384-LRlmVvLKVApDVGuspQFnRQJjkv0P7/YFrw84YYQtmYG4nK8c+M+NlmYDCv0rKWpG" crossorigin="anonymous">
+    <link href="https://static.orschlurch.net/css/dropzone.css" rel="stylesheet">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="https://static.orschlurch.net/img/fav/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://static.orschlurch.net/img/fav/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://static.orschlurch.net/img/fav/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://static.orschlurch.net/img/fav/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="https://static.orschlurch.net/img/fav/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://static.orschlurch.net/img/fav/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://static.orschlurch.net/img/fav/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://static.orschlurch.net/img/fav/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="https://static.orschlurch.net/img/fav/favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="https://static.orschlurch.net/img/fav/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="https://static.orschlurch.net/img/fav/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="https://static.orschlurch.net/img/fav/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="https://static.orschlurch.net/img/fav/favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="&nbsp;"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="https://static.orschlurch.net/img/fav/mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="https://static.orschlurch.net/img/fav/mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="https://static.orschlurch.net/img/fav/mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="https://static.orschlurch.net/img/fav/mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="https://static.orschlurch.net/img/fav/mstile-310x310.png" />
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://static.orschlurch.net/common/jquery/jquery.min.js"></script>
+    <script src="https://static.orschlurch.net/common/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="https://static.orschlurch.net/js/common.js"></script>
+    <script src="https://static.orschlurch.net/js/dropzone.js"></script>
+    
+
+    <script>
+        Dropzone.autoDiscover = false;
+
+        var dropzoneOne = function () {
+            var myDropzone = new Dropzone("form#dropzoneOne", {
+                url: "/usersubmission/upload/image",
+                maxFiles: 12,
+                maxFilesize: 30,
+                acceptedFiles: 'image/jpg,image/jpeg,image/png,image/gif',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+
+                init: function () {
+                    this.on("success", function () {
+                        //on success show submit form and make other button non clickable
+                        $("#collapseSubmitImage").toggleClass('show');
+                        $("#videoButton").addClass("hidden");
+                        $("#imageButton").addClass("hidden");
+
+                    });
+                }
+            });
+
+        };
+
+        var dropzoneTwo = function () {
+            var myDropzone = new Dropzone("form#dropzoneTwo", {
+                url: "/usersubmission/upload/video",
+                acceptedFiles: "video/*", /* mp4,video/ogg,video/webm,video/mov*/
+                maxFiles: 1,
+                maxFilesize: 30,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                init: function () {
+                    this.on("success", function () {
+                        $("#collapseSubmitVideo").toggleClass('show');
+                        $("#videoButton").addClass("hidden");
+                        $("#imageButton").addClass("hidden");
+                    });
+                }
+            });
+        };
+
+        function makeid(length) {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for (var i = 0; i < length; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+
+        window.onload = function () {
+            dropzoneOne(); //on Buttonclick 1
+            dropzoneTwo(); //on Buttonclick 2
+            var id = makeid(10);
+            document.getElementById('hiddenid').value = id;
+            document.getElementById('hiddenid_form').value = id;
+
+
+        };
+    </script>
+
+    <script>
+        if (getCookie("user_online") != "1") {
+            $.get("/ping", function (data, status) {
+                setCookieUserOnline("user_online", "1", 0.02);
+            });
+        }
+    </script>
+
+
+</head>
+
+<body>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136700210-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'UA-136700210-1');
+</script>
+<div class="menu-overlay" style="display: none;"></div>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/"><img src="https://static.orschlurch.net/img/logo_de.svg"
+                                              alt="Orschlurch" width="262"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#SearchResponsive"
+                aria-controls="SearchResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="far fa-search"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="SearchResponsive">
+            <form id="search_all" action="https://de.orschlurch.net/searchresult" method="GET">
+                <input type="hidden" name="_token" value="q4x6QtMKbfB0wngWJDzXVcrPSjgvmbJQSWieUfHO">
+
+                <div class="input-group">
+                    <input id="search" name="search" type="text" class="form-control" placeholder="Suche"
+                           aria-label="Search"
+                           autocomplete="off" aria-describedby="basic-addon2" value="" style="border-color: #fff;box-shadow:none;height:50px;">
+
+
+                    <div class="input-group-append">
+
+                        <button class="btn search_button" type="submit"><i class="fal fa-search"></i></button>
+                    </div>
+                    <table class="table table-bordered table-hover .input-group.mb-3"
+                           style="position: absolute; background-color: white; margin-top: 50px;">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="mob-logo"><a class="navbar-brand" href="/"><img
+                                src="https://static.orschlurch.net/img/logo_de.svg" alt="Orschlurch"
+                                width="196"></a></li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Startseite
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/area/videos">Videos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/area/pix">Pix</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="return openModal();">Upload</a>
+                </li>
+                <li class="nav-item mobile_only">
+                    <a class="nav-link" href="#" onclick="return hallOfFameModal();">Hall of Fame</a>
+                </li>
+                <li class="nav-item" style="display:none;">
+                    <a class="nav-link" href="/games">Spiele</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/area/lustige-artikel">Lustige Artikel</a>
+                </li>
+            </ul>
+
+
+            <ul class="mob-user-menu navbar-nav ml-auto">
+                                <li class="nav-item">
+                    <a href="https://de.orschlurch.net" class="lang-act">DE</a> | <a
+                            href="https://en.orschlurch.net">EN</a>
+                </li>
+
+            </ul>
+            <div class="choose-cat mobile-choose" id="choose-main" style=" display: block; margin-bottom: 0px;">
+                <span class="mobile-choose-span">Du hast die Wahl:</span>
+                <a href="#" class="btn-grn" data-toggle="modal" data-target="#cats">Schlagwort wählen</a>
+            </div>
+        </div>
+        <form id="search_all" action="https://de.orschlurch.net/searchresult" method="GET">
+            <input type="hidden" name="_token" value="q4x6QtMKbfB0wngWJDzXVcrPSjgvmbJQSWieUfHO">
+
+        <div class="input-group mb-3">
+            <input id="search" name="search" type="text" class="form-control" placeholder="Suche"
+                   aria-label="Search"
+                   autocomplete="off" aria-describedby="basic-addon2" value="" style="border-color: #fff;box-shadow:none;">
+
+
+            <div class="input-group-append">
+
+                    <button class="btn search_button" type="submit"><i class="fal fa-search"></i></button>
+            </div>
+            <table class="table table-bordered table-hover .input-group.mb-3"
+                   style="position: absolute; background-color: white; margin-top: 50px;">
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        </form>
+
+        <div class="ml-auto lang-pick">
+            <a href="https://de.orschlurch.net" class="lang-act">DE</a> |
+            <a href="https://en.orschlurch.net">EN</a>
+        </div>
+    </div>
+</nav>
+<header>
+    <div class="container">
+        <h1>Hasser werden hassen!</h1>
+        <p>Zu blau, zu grün, zu neu, zu geil? Ist uns vollkomme Latte! Hater verpisst euch! Alle anderen Willkommen bei Orschlurch Version 4! Wir haben noch viel vor und freuen uns auf die Reise mit euch.</p>
+        <a href="/register" class="btn-grn">anmelden</a>
+    </div>
+
+</header>
+    <div class="amazon-wrapper">
+    <div class="container amazon_container">
+        <div class="amazon-custom-search">
+            <form autocomplete="off">
+                <input id="amzn_search" type="text" class="form-control" placeholder="Produkt auf Amazon suchen">
+                <a href="#" id="a_amazon"  target="_blank" class="btn-grn" onclick="amazon_search(); return false;">Jetzt suchen</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function amazon_search() {
+        var val = document.getElementById('amzn_search').value;
+        var base_url_start = 'https://www.amazon.de/s?k=';
+        var base_url_search_term = val;
+        var base_url_end = '&ref=nb_sb_noss_1&tag=orschlurchn05-21';
+        // window.location.href = base_url_start+base_url_search_term+base_url_end;
+        window.open(base_url_start+base_url_search_term+base_url_end,'_blank');
+        return false;
+    }
+
+    // Get the input field
+    var input = document.getElementById("amzn_search");
+
+    // Execute a function when the user releases a key on the keyboard
+    input.addEventListener("keyup", function(event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("a_amazon").click();
+        }
+    });
+</script><div class="vid-prob">
+    <p>Probleme, Morddrohungen oder sonstiges unwichtiges Feedback? <a href='mailto:lurchorsch@gmail.com'>Schreib uns!</a></p>
+</div>
+
+<!-- Page Content -->
+<div class="container">
+    <div class="main-content">
+
+        <div class="choose-cat" id="choose-main">
+            <span>Du hast die Wahl:</span>
+            <a href="#" class="btn-grn" data-toggle="modal" data-target="#cats">Schlagwort wählen</a>
+        </div>
+
+
+        
+
+        <div class="row row-10">
+
+            
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/an-der-kreuzung-alles-falsch-machen"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2103/thumbnails/thumbnail-4-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/an-der-kreuzung-alles-falsch-machen">An der Kreuzung alles falsch machen</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 11.07.2019</span>
+                
+                <span><a class="like" id="like-2103" href="#" onclick="doALike(2103);return false;"><i class="far fa-thumbs-up"></i> 0</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Mehr kann nicht schief gehen.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/voellig-breit-versuchen-zu-telefonieren"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2102/thumbnails/thumbnail-1-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/voellig-breit-versuchen-zu-telefonieren">Völlig breit versuchen zu telefonieren</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 11.07.2019</span>
+                
+                <span><a class="like" id="like-2102" href="#" onclick="doALike(2102);return false;"><i class="far fa-thumbs-up"></i> 1</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Vorher muss man sich aber noch ein Handy besorgen.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/im-lkw-pumpen"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2101/thumbnails/thumbnail-1-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/im-lkw-pumpen">Im LKW pumpen</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 11.07.2019</span>
+                
+                <span><a class="like" id="like-2101" href="#" onclick="doALike(2101);return false;"><i class="far fa-thumbs-up"></i> 1</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Man darf während der Trainingsphase keine Zeit verschwenden.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                                                <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+        <div class="card h-100">
+
+            <a href="https://amzn.to/2Yv2Pfx" rel="nofollow" target="_blank"><img class="card-img-top"
+                                                     src="https://de.orschlurch.net/storage/gadgets/July2019/rsl3e6IWQXMRS9JK8Cmr-cropped.jpg"
+                                                     alt=""></a>
+
+
+            <div class="card-body">
+                <p class="card-cat">
+                    <i class="fal fa-list-ul"></i> <a
+                            href="/area/lustige-artikel">Lustige Artikel</a>
+                </p>
+                <h4 class="card-title">
+
+                    <a href="https://amzn.to/2Yv2Pfx" rel="nofollow" target="_blank">Star Wars Toaster</a>
+
+                </h4>
+                <p class="card-meta">
+                    <span style="display:none;"><i class="fal fa-calendar"></i> 03.07.2019</span>
+
+                    <span><a class="like" id="like-2065" href="#" onclick="doALike(2065);return false;"><i class="far fa-thumbs-up"></i> 75</a></span>
+                    <span><i class="fal fa-comments"></i> 0</span>
+                </p>
+
+                <p class="card-text">Für jeden Star Wars Fan ein absolutes Muss! Der Star Wars Toaster :)</p>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+                                                
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/mit-der-falschen-bier-exen"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2097/thumbnails/thumbnail-3-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/mit-der-falschen-bier-exen">Mit der Falschen Bier exen</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 10.07.2019</span>
+                
+                <span><a class="like" id="like-2097" href="#" onclick="doALike(2097);return false;"><i class="far fa-thumbs-up"></i> 0</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Da hat man wohl keine Chance.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/arschloch-wird-5"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/posts/July2019/BpSYx39JskpCSjb1wrPK-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/arschloch-wird-5">Arschloch wird 5</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 10.07.2019</span>
+                
+                <span><a class="like" id="like-2096" href="#" onclick="doALike(2096);return false;"><i class="far fa-thumbs-up"></i> 0</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Da möchte man die weiteren Geburtstage nicht erleben.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/sonnenschutzfaktor-sonnenschirm"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2095/thumbnails/thumbnail-4-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/sonnenschutzfaktor-sonnenschirm">Sonnenschutzfaktor Sonnenschirm</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 10.07.2019</span>
+                
+                <span><a class="like" id="like-2095" href="#" onclick="doALike(2095);return false;"><i class="far fa-thumbs-up"></i> 0</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Sieht nicht gerade praktisch aus, aber wenn es hilft..</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/wie-man-sein-kind-von-der-schule-abholt"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2094/thumbnails/thumbnail-3-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/wie-man-sein-kind-von-der-schule-abholt">Wie man sein Kind von der Schule abholt</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 09.07.2019</span>
+                
+                <span><a class="like" id="like-2094" href="#" onclick="doALike(2094);return false;"><i class="far fa-thumbs-up"></i> 3</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Es sollen ja alle etwas davon haben :)</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/an-der-kreuzung-posen"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2093/thumbnails/thumbnail-5-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/an-der-kreuzung-posen">An der Kreuzung posen</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 09.07.2019</span>
+                
+                <span><a class="like" id="like-2093" href="#" onclick="doALike(2093);return false;"><i class="far fa-thumbs-up"></i> 2</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Den Abgang sollte er nochmal üben.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/der-maennlichste-pkw-anhaenger"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2092/thumbnails/thumbnail-8-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/der-maennlichste-pkw-anhaenger">Der männlichste PKW-Anhänger</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 09.07.2019</span>
+                
+                <span><a class="like" id="like-2092" href="#" onclick="doALike(2092);return false;"><i class="far fa-thumbs-up"></i> 0</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Geht es geiler? Ich glaube nicht!</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/rasensprenger-von-wimbeldon"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2091/thumbnails/thumbnail-1-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/rasensprenger-von-wimbeldon">Rasensprenger von Wimbeldon</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 09.07.2019</span>
+                
+                <span><a class="like" id="like-2091" href="#" onclick="doALike(2091);return false;"><i class="far fa-thumbs-up"></i> 0</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Führen wohl ihr Eigenleben.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/der-etwas-andere-hochzeitskorso"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2090/thumbnails/thumbnail-2-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/der-etwas-andere-hochzeitskorso">Der etwas andere Hochzeitskorso</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 09.07.2019</span>
+                
+                <span><a class="like" id="like-2090" href="#" onclick="doALike(2090);return false;"><i class="far fa-thumbs-up"></i> 1</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Wirklich erklären kann das auch keiner, oder?</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                                    <div class="col-lg-12 ba-main">
+                        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                        <!-- orschlurch leaderboard -->
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-2458428816320707"
+                             data-ad-slot="7547835037"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/lkw-fahrer-lenkt-sich-an-ampel-ab"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2087/thumbnails/thumbnail-10-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/lkw-fahrer-lenkt-sich-an-ampel-ab">LKW Fahrer lenkt sich an Ampel ab</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 08.07.2019</span>
+                
+                <span><a class="like" id="like-2087" href="#" onclick="doALike(2087);return false;"><i class="far fa-thumbs-up"></i> 1</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Irgendwie sehr schön anzusehen - ich kann mir nicht helfen.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/mit-schwung-die-hoden-zerstoeren"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2086/thumbnails/thumbnail-3-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/mit-schwung-die-hoden-zerstoeren">Mit Schwung die Hoden zerstören</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 08.07.2019</span>
+                
+                <span><a class="like" id="like-2086" href="#" onclick="doALike(2086);return false;"><i class="far fa-thumbs-up"></i> 0</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Da bekommt man direkt Phantomschmerzen.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/draengler-bekommt-quittung"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2085/thumbnails/thumbnail-5-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/draengler-bekommt-quittung">Drängler bekommt Quittung</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 08.07.2019</span>
+                
+                <span><a class="like" id="like-2085" href="#" onclick="doALike(2085);return false;"><i class="far fa-thumbs-up"></i> 3</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Wie bescheuert kann man sein? Lappen weg bitte.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                                                <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+        <div class="card h-100">
+
+            <a href="https://amzn.to/2FWX6rE" rel="nofollow" target="_blank"><img class="card-img-top"
+                                                     src="https://de.orschlurch.net/storage/gadgets/July2019/ZTzJbixqYjHrXM1nTB6o-cropped.jpg"
+                                                     alt=""></a>
+
+
+            <div class="card-body">
+                <p class="card-cat">
+                    <i class="fal fa-list-ul"></i> <a
+                            href="/area/lustige-artikel">Lustige Artikel</a>
+                </p>
+                <h4 class="card-title">
+
+                    <a href="https://amzn.to/2FWX6rE" rel="nofollow" target="_blank">Einhorn Boot</a>
+
+                </h4>
+                <p class="card-meta">
+                    <span style="display:none;"><i class="fal fa-calendar"></i> 04.07.2019</span>
+
+                    <span><a class="like" id="like-2080" href="#" onclick="doALike(2080);return false;"><i class="far fa-thumbs-up"></i> 48</a></span>
+                    <span><i class="fal fa-comments"></i> 0</span>
+                </p>
+
+                <p class="card-text">Wie Krass ist das?</p>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+                                                
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/einmal-erde-bitte"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2079/thumbnails/thumbnail-3-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/einmal-erde-bitte">Einmal Erde bitte!</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 05.07.2019</span>
+                
+                <span><a class="like" id="like-2079" href="#" onclick="doALike(2079);return false;"><i class="far fa-thumbs-up"></i> 6</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Da hatte wohl jemand einen schlechten Tag.</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/knappe-sache-328"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2078/thumbnails/thumbnail-2-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/knappe-sache-328">Knappe Sache #328</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 05.07.2019</span>
+                
+                <span><a class="like" id="like-2078" href="#" onclick="doALike(2078);return false;"><i class="far fa-thumbs-up"></i> 1</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Das hätte auch anders ausgehen können</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                 <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100">
+        
+        <a href="/post/microsoft-edge-bewerten"><img class="card-img-top"
+                                                 src="https://de.orschlurch.net/storage/videos/2077/thumbnails/thumbnail-1-cropped.jpg"
+                                                 alt=""></a>
+
+
+        <div class="card-body">
+            <p class="card-cat">
+                <i class="fal fa-list-ul"></i> <a
+                        href="/area/videos">Videos</a>
+            </p>
+            <h4 class="card-title">
+
+                <a href="/post/microsoft-edge-bewerten">Microsoft Edge bewerten</a>
+
+            </h4>
+            <p class="card-meta">
+                <span><i class="fal fa-calendar"></i> 05.07.2019</span>
+                
+                <span><a class="like" id="like-2077" href="#" onclick="doALike(2077);return false;"><i class="far fa-thumbs-up"></i> 1</a></span>
+                <span><i class="fal fa-comments"></i> 0</span>
+            </p>
+            
+            <p class="card-text">Sieht sehr fair aus</p>
+            
+        </div>
+    </div>
+</div>
+                             
+                
+                
+                 
+                                                <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+        <div class="card h-100">
+
+            <a href="https://amzn.to/2xDMXve" rel="nofollow" target="_blank"><img class="card-img-top"
+                                                     src="https://de.orschlurch.net/storage/gadgets/July2019/kDJlKkjxsRmNBTcwCncm-cropped.jpg"
+                                                     alt=""></a>
+
+
+            <div class="card-body">
+                <p class="card-cat">
+                    <i class="fal fa-list-ul"></i> <a
+                            href="/area/lustige-artikel">Lustige Artikel</a>
+                </p>
+                <h4 class="card-title">
+
+                    <a href="https://amzn.to/2xDMXve" rel="nofollow" target="_blank">Einhorn Dusche</a>
+
+                </h4>
+                <p class="card-meta">
+                    <span style="display:none;"><i class="fal fa-calendar"></i> 08.07.2019</span>
+
+                    <span><a class="like" id="like-2083" href="#" onclick="doALike(2083);return false;"><i class="far fa-thumbs-up"></i> 33</a></span>
+                    <span><i class="fal fa-comments"></i> 0</span>
+                </p>
+
+                <p class="card-text">Die perfekte Abkühlung im Sommer - nicht nur für Einhorn Fans :-)</p>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+                                                
+        </div>
+
+        <!-- Pagination -->
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item" style="display: none">
+                <a class="page-link" href="/" aria-label="Erste">
+                    <span aria-hidden="true">&laquo; <b>Erste</b></span>
+                </a>
+            </li>
+                            <li class="page-item">
+                    <a class="page-link" href="https://de.orschlurch.net/area/videos/seite/32" aria-label="Previous">
+                        <span aria-hidden="true">&lsaquo;</span>
+                    </a>
+                </li>
+            
+
+            <ul class="innerlinks"><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos">1</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/2">2</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/3">3</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/4">4</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/5">5</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/6">6</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/7">7</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/8">8</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/9">9</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/10">10</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/11">11</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/12">12</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/13">13</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/14">14</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/15">15</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/16">16</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/17">17</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/18">18</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/19">19</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/20">20</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/21">21</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/22">22</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/23">23</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/24">24</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/25">25</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/26">26</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/27">27</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/28">28</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/29">29</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/30">30</a></li><li ><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/31">31</a></li><li ><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/32">32</a></li><li  class="active page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/33">33</a></li><li ><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/34">34</a></li><li ><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/35">35</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/36">36</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/37">37</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/38">38</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/39">39</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/40">40</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/41">41</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/42">42</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/43">43</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/44">44</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/45">45</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/46">46</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/47">47</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/48">48</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/49">49</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/50">50</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/51">51</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/52">52</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/53">53</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/54">54</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/55">55</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/56">56</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/57">57</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/58">58</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/59">59</a></li><li class="mobile page-item"><a class='page-link' href="https://de.orschlurch.net/area/videos/seite/60">60</a></li></ul>
+
+
+                            <li class="page-item">
+                    <a class="page-link" href="https://de.orschlurch.net/area/videos/seite/34" aria-label="Next">
+                        <span aria-hidden="true">&rsaquo;</span>
+                    </a>
+                </li>
+                        <li class="page-item" style="display: none">
+                <a class="page-link" href="60" aria-label="Next">
+                    <span aria-hidden="true"><b>Letzte</b> &raquo;</span>
+                </a>
+            </li>
+        </ul>
+
+
+                    <div class="nl-box">
+                <h4>Ich will nen Keks!</h4>
+                <p>Wer Kekse will muss mitmachen, einfach anmelden und wir spamen dich zu und verkaufen deine Daten.</p>
+                <div class="input-group mb-3">
+                    <a href="/register" class="btn-grn">Ja, macht mich unglücklich</a>
+                </div>
+                <p>Eheringe nicht nötig! Kriegen wir so hin!</p>
+            </div>
+            </div>
+
+    <div class="sidebar">
+
+    
+        <div class="log-box">
+            <div class="panel panel-default">
+                <div class="panel-heading"> Login</div>
+
+                <div class="panel-body">
+                    <form class="form-horizontal" method="POST" action="https://de.orschlurch.net/login">
+                        <input type="hidden" name="_token" value="q4x6QtMKbfB0wngWJDzXVcrPSjgvmbJQSWieUfHO">
+
+                        <div class="form-group">
+
+                            <div class="col-md-12">
+                                <input id="email" type="email" class="form-control" placeholder="E-Mail" name="email" value="" required autofocus>
+
+                                                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-md-12">
+                                <input id="password" type="password" class="form-control" placeholder="Passwort" name="password" required>
+
+                                                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember" >   Login merken
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn btn-grn">
+                                    Login
+                                </button>
+                                <!-- Facebook Login -->
+                                <a href="https://de.orschlurch.net/redirect" class="btn btn-primary btn-fb">Facebook Login</a>
+
+                                <a class="btn btn-link" href="https://de.orschlurch.net/password/reset">
+                                    Passwort vergessen
+                                </a>
+                                <a class="btn btn-link" href="/register">
+                                    Noch keinen Account?
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    
+    <div class="sidebar-box" id="online-box">
+        <h4><i class="fas fa-person-sign"></i> Orschlurche online</h4>
+        <p>40 User online</p>
+    </div>
+
+    <div class="sidebar-box" id="article-box">
+        <h4><i class="fas fa-flask-poison"></i> Das brauchst du!</h4>
+        <ul>
+                        
+                                <li><a href="https://amzn.to/2PQ8aMO" target="_blank" title="Wie wahr..."><img src="https://static.orschlurch.net/gadgets/November2019/deywCzJPlXWkDSnV6Jqu.jpg"></a></li>
+                    
+                                
+                                <li><a href="https://amzn.to/2nwHllo" target="_blank" title="Schlüsselbrett..."><img src="https://static.orschlurch.net/gadgets/October2019/c1ZdJNQql49IXVWD7LmD.jpg"></a></li>
+                    
+                                
+                                <li><a href="https://amzn.to/39IPqq5" target="_blank" title="Öhm...okay..."><img src="https://static.orschlurch.net/gadgets/January2020/3Sn6pEUcw55ZrHhjBqnv.jpg"></a></li>
+                    
+                                
+                                <li><a href="https://amzn.to/2Mq1t3Y" target="_blank" title="Coole Matratze"><img src="https://static.orschlurch.net/gadgets/May2019/1m8JzDqBSnFr8dmlj6LW.jpg"></a></li>
+                    
+                                
+                                <li><a href="https://amzn.to/2XFmN6l" target="_blank" title="Dicke Wurst auf dem Grill"><img src="https://static.orschlurch.net/gadgets/April2019/ujSphVLlAzSCBNP2ItX0.jpg"></a></li>
+                    
+                                
+                                <li><a href="https://amzn.to/2ZBWizt" target="_blank" title="Hühner-Warnweste"><img src="https://static.orschlurch.net/gadgets/August2019/x31Dp3HxljbjyteIMNch.jpg"></a></li>
+                    
+                                        </ul>
+        <div class="clearfix"></div>
+        <li style="width: 100%;float: unset;"><div class="col-12" style="padding: 0;">
+                <a style="text-decoration: none;" href="/area/lustige-artikel" class="btn-grn">Alle Ansehen</a>
+            </div>
+        </li>
+    </div>
+
+
+    <div class="sidebar-box" id="info-box">
+        <h4><i class="far fa-biohazard"></i> Deine Entscheidung!</h4>
+        <a href="#" class="OneSignal-prompt" onclick="return false">Du willst benachrichtigt werden, wenn es Neues auf Orschlurch gibt? Hier...</a>
+    </div>
+
+
+    <p class="info-side">Ein * oder "Lustige Artikel" sind Affiliatelinks zu Amazon. Dadurch unterstützt ihr Orschlurch.net. Vielen Dank!</p>
+            <a href="#" onclick="return hallOfFameModal();"><img src="https://static.orschlurch.net/img/hallfame.svg"></a>
+            <p class="sidebar_hall">Hall of Fame <span class="sidebar_hall_top">Top Uploader</span></p>
+
+   <div class="a-ba">
+
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- Orsch rechts Responsive -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-2458428816320707"
+             data-ad-slot="7153350843"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+   </div>
+
+</div>
+<div class="clearfix"></div>
+
+<script>
+    $(document).ready(function() {
+        var top = $('.a-ba').offset().top;
+        $(window).scroll(function() {
+            if($(this).scrollTop() > top) {
+                $('.a-ba').addClass('fixed');
+            } else {
+                $('.a-ba').removeClass('fixed');
+            }
+        });
+    });
+</script>
+<!-- /.container -->
+</div>
+
+
+<!-- Footer -->
+<footer>
+    
+    <div class="footer-1">Orschlurch.net is a participant in the Amazon EU Associates Programme, an affiliate
+        advertising programme designed to provide a means for sites to earn advertising fees by advertising and linking
+        to Amazon.de
+    </div>
+    <div class="footer-2">Copyright © 2020 Orschlurch.net</div>
+    <div class="footer-3">
+        <div class="container">
+            <a href="/impressum">Kontakt</a>
+            <a href="https://www.byteforce.com">
+                <span>Executed by
+                <img src="https://static.orschlurch.net/img/bflogo.svg"
+                     style="position: absolute; right: -180px; top: 50%;">
+                </span>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .reset_checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #ffff;
+        border: 1px solid #9c9b9c;
+    }
+
+</style>
+
+<!-- Category Modal -->
+<div class="modal fade" id="cats" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <h5 class="modal-title">Schlagwortfilter - Es werden nur Beiträge mit allen ausgewählten Schlagwörtern angezeigt</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <form method="get" name="tag_form" action="/tags">
+                <input type="hidden" name="_token" value="q4x6QtMKbfB0wngWJDzXVcrPSjgvmbJQSWieUfHO">
+                <div class="modal-body cat-inner">
+                                        <ul>
+                                                    <li>
+                                <label class="customcheck">alkohol
+                                    <input type="checkbox" name="tag_filter[41]" id="checkbox-41" onclick="markMe(41)">
+                                    <span class="checkmark" id="selected-41"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">aus dem leben
+                                    <input type="checkbox" name="tag_filter[74]" id="checkbox-74" onclick="markMe(74)">
+                                    <span class="checkmark" id="selected-74"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">auto
+                                    <input type="checkbox" name="tag_filter[8]" id="checkbox-8" onclick="markMe(8)">
+                                    <span class="checkmark" id="selected-8"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">autsch
+                                    <input type="checkbox" name="tag_filter[5]" id="checkbox-5" onclick="markMe(5)">
+                                    <span class="checkmark" id="selected-5"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">bei der arbeit
+                                    <input type="checkbox" name="tag_filter[59]" id="checkbox-59" onclick="markMe(59)">
+                                    <span class="checkmark" id="selected-59"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">bier
+                                    <input type="checkbox" name="tag_filter[38]" id="checkbox-38" onclick="markMe(38)">
+                                    <span class="checkmark" id="selected-38"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">boot
+                                    <input type="checkbox" name="tag_filter[62]" id="checkbox-62" onclick="markMe(62)">
+                                    <span class="checkmark" id="selected-62"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">clever
+                                    <input type="checkbox" name="tag_filter[66]" id="checkbox-66" onclick="markMe(66)">
+                                    <span class="checkmark" id="selected-66"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">compilation
+                                    <input type="checkbox" name="tag_filter[7]" id="checkbox-7" onclick="markMe(7)">
+                                    <span class="checkmark" id="selected-7"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">dashcam
+                                    <input type="checkbox" name="tag_filter[76]" id="checkbox-76" onclick="markMe(76)">
+                                    <span class="checkmark" id="selected-76"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">dreist
+                                    <input type="checkbox" name="tag_filter[75]" id="checkbox-75" onclick="markMe(75)">
+                                    <span class="checkmark" id="selected-75"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">ehrenmann
+                                    <input type="checkbox" name="tag_filter[54]" id="checkbox-54" onclick="markMe(54)">
+                                    <span class="checkmark" id="selected-54"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">essen
+                                    <input type="checkbox" name="tag_filter[77]" id="checkbox-77" onclick="markMe(77)">
+                                    <span class="checkmark" id="selected-77"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">fahrrad
+                                    <input type="checkbox" name="tag_filter[49]" id="checkbox-49" onclick="markMe(49)">
+                                    <span class="checkmark" id="selected-49"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">fail
+                                    <input type="checkbox" name="tag_filter[3]" id="checkbox-3" onclick="markMe(3)">
+                                    <span class="checkmark" id="selected-3"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">feuer
+                                    <input type="checkbox" name="tag_filter[45]" id="checkbox-45" onclick="markMe(45)">
+                                    <span class="checkmark" id="selected-45"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">feuerwehr
+                                    <input type="checkbox" name="tag_filter[69]" id="checkbox-69" onclick="markMe(69)">
+                                    <span class="checkmark" id="selected-69"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">frau
+                                    <input type="checkbox" name="tag_filter[6]" id="checkbox-6" onclick="markMe(6)">
+                                    <span class="checkmark" id="selected-6"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">fussball
+                                    <input type="checkbox" name="tag_filter[35]" id="checkbox-35" onclick="markMe(35)">
+                                    <span class="checkmark" id="selected-35"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">gif
+                                    <input type="checkbox" name="tag_filter[31]" id="checkbox-31" onclick="markMe(31)">
+                                    <span class="checkmark" id="selected-31"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">held
+                                    <input type="checkbox" name="tag_filter[51]" id="checkbox-51" onclick="markMe(51)">
+                                    <span class="checkmark" id="selected-51"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">hund
+                                    <input type="checkbox" name="tag_filter[32]" id="checkbox-32" onclick="markMe(32)">
+                                    <span class="checkmark" id="selected-32"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">katze
+                                    <input type="checkbox" name="tag_filter[10]" id="checkbox-10" onclick="markMe(10)">
+                                    <span class="checkmark" id="selected-10"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">kinder
+                                    <input type="checkbox" name="tag_filter[47]" id="checkbox-47" onclick="markMe(47)">
+                                    <span class="checkmark" id="selected-47"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">klartext
+                                    <input type="checkbox" name="tag_filter[63]" id="checkbox-63" onclick="markMe(63)">
+                                    <span class="checkmark" id="selected-63"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">knapp
+                                    <input type="checkbox" name="tag_filter[57]" id="checkbox-57" onclick="markMe(57)">
+                                    <span class="checkmark" id="selected-57"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">lkw
+                                    <input type="checkbox" name="tag_filter[52]" id="checkbox-52" onclick="markMe(52)">
+                                    <span class="checkmark" id="selected-52"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">lustig
+                                    <input type="checkbox" name="tag_filter[42]" id="checkbox-42" onclick="markMe(42)">
+                                    <span class="checkmark" id="selected-42"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">mann
+                                    <input type="checkbox" name="tag_filter[50]" id="checkbox-50" onclick="markMe(50)">
+                                    <span class="checkmark" id="selected-50"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">männerspielzeug
+                                    <input type="checkbox" name="tag_filter[56]" id="checkbox-56" onclick="markMe(56)">
+                                    <span class="checkmark" id="selected-56"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">moped
+                                    <input type="checkbox" name="tag_filter[58]" id="checkbox-58" onclick="markMe(58)">
+                                    <span class="checkmark" id="selected-58"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">musik
+                                    <input type="checkbox" name="tag_filter[40]" id="checkbox-40" onclick="markMe(40)">
+                                    <span class="checkmark" id="selected-40"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">natur
+                                    <input type="checkbox" name="tag_filter[79]" id="checkbox-79" onclick="markMe(79)">
+                                    <span class="checkmark" id="selected-79"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">peinlich
+                                    <input type="checkbox" name="tag_filter[68]" id="checkbox-68" onclick="markMe(68)">
+                                    <span class="checkmark" id="selected-68"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">pixxdump
+                                    <input type="checkbox" name="tag_filter[4]" id="checkbox-4" onclick="markMe(4)">
+                                    <span class="checkmark" id="selected-4"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">polizei
+                                    <input type="checkbox" name="tag_filter[46]" id="checkbox-46" onclick="markMe(46)">
+                                    <span class="checkmark" id="selected-46"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">pool
+                                    <input type="checkbox" name="tag_filter[55]" id="checkbox-55" onclick="markMe(55)">
+                                    <span class="checkmark" id="selected-55"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">respekt
+                                    <input type="checkbox" name="tag_filter[67]" id="checkbox-67" onclick="markMe(67)">
+                                    <span class="checkmark" id="selected-67"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">sexy
+                                    <input type="checkbox" name="tag_filter[33]" id="checkbox-33" onclick="markMe(33)">
+                                    <span class="checkmark" id="selected-33"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">skill
+                                    <input type="checkbox" name="tag_filter[72]" id="checkbox-72" onclick="markMe(72)">
+                                    <span class="checkmark" id="selected-72"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">sport
+                                    <input type="checkbox" name="tag_filter[48]" id="checkbox-48" onclick="markMe(48)">
+                                    <span class="checkmark" id="selected-48"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">streich
+                                    <input type="checkbox" name="tag_filter[39]" id="checkbox-39" onclick="markMe(39)">
+                                    <span class="checkmark" id="selected-39"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">süß
+                                    <input type="checkbox" name="tag_filter[60]" id="checkbox-60" onclick="markMe(60)">
+                                    <span class="checkmark" id="selected-60"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">tanzen
+                                    <input type="checkbox" name="tag_filter[34]" id="checkbox-34" onclick="markMe(34)">
+                                    <span class="checkmark" id="selected-34"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">tier
+                                    <input type="checkbox" name="tag_filter[61]" id="checkbox-61" onclick="markMe(61)">
+                                    <span class="checkmark" id="selected-61"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">tricks
+                                    <input type="checkbox" name="tag_filter[44]" id="checkbox-44" onclick="markMe(44)">
+                                    <span class="checkmark" id="selected-44"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">trump
+                                    <input type="checkbox" name="tag_filter[43]" id="checkbox-43" onclick="markMe(43)">
+                                    <span class="checkmark" id="selected-43"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">Überraschung
+                                    <input type="checkbox" name="tag_filter[65]" id="checkbox-65" onclick="markMe(65)">
+                                    <span class="checkmark" id="selected-65"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">Überwachungskamera
+                                    <input type="checkbox" name="tag_filter[78]" id="checkbox-78" onclick="markMe(78)">
+                                    <span class="checkmark" id="selected-78"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">unfall
+                                    <input type="checkbox" name="tag_filter[9]" id="checkbox-9" onclick="markMe(9)">
+                                    <span class="checkmark" id="selected-9"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">werbung
+                                    <input type="checkbox" name="tag_filter[64]" id="checkbox-64" onclick="markMe(64)">
+                                    <span class="checkmark" id="selected-64"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">win
+                                    <input type="checkbox" name="tag_filter[53]" id="checkbox-53" onclick="markMe(53)">
+                                    <span class="checkmark" id="selected-53"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">wow
+                                    <input type="checkbox" name="tag_filter[70]" id="checkbox-70" onclick="markMe(70)">
+                                    <span class="checkmark" id="selected-70"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">wtf
+                                    <input type="checkbox" name="tag_filter[73]" id="checkbox-73" onclick="markMe(73)">
+                                    <span class="checkmark" id="selected-73"></span>
+                                </label>
+                            </li>
+                                                    <li>
+                                <label class="customcheck">zocken
+                                    <input type="checkbox" name="tag_filter[71]" id="checkbox-71" onclick="markMe(71)">
+                                    <span class="checkmark" id="selected-71"></span>
+                                </label>
+                            </li>
+                                            </ul>
+                        <div class="clearfix"></div>
+
+                    <a href="#" class="btn-grn" onclick="tag_form.submit()">auswählen</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var myselection = [];
+
+    function markMe(id) {
+
+        myselection.push(id);
+
+        if(myselection.length > 3)
+        {
+            resetFirstSelection();
+        }
+    }
+
+    function resetFirstSelection()
+    {
+        $("#selected-" + myselection[0]).removeClass("checkmark").addClass("reset_checkmark").removeClass("reset_checkmark").addClass("checkmark");
+        $("#checkbox-" + myselection[0]).prop('checked', false);
+
+        myselection.shift();
+    }
+</script><button onclick="topFunction()" id="topBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="upModal" tabindex="-1" role="dialog" aria-labelledby="upModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header site-title">
+                <h5>Zeug hinzufügen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Unterstützte Dateiformate sind .mp4, .ogg, .webm, .mov, .jpg, .gif
+                    <span>Hier kannst du deine Videos oder Bilder hochladen. Achte bitte auf die passenden Dateiendungen. Bei Problemen kannst du uns gerne kontaktieren.</span></p>
+
+                <div class="btn-area">
+                    <a id="imageButton" class="btn-grn" data-toggle="collapse" href="#collapsePics" role="button" aria-expanded="false" aria-controls="collapsePics">Pix</a>
+                    <a id="videoButton" class="btn-grn" data-toggle="collapse" href="#collapseVideos" role="button" aria-expanded="false" aria-controls="collapseVideos">Video</a>
+                </div>
+
+                <div class="clearfix"></div>
+
+
+            </div>
+
+            <div class="collapse" id="collapsePics">
+                <div class="card card-body">
+                    <form id="dropzoneOne" class="dropzone">
+                        <div class="dz-message" data-dz-message style="margin: 0px;padding: 50px;">Bilder hier hineinziehen oder klicken
+                        </div>
+                        <input type="hidden" value="" id="hiddenid" name="hiddenid">
+                    </form>
+                </div>
+            </div>
+            <div class="collapse" id="collapseSubmitImage">
+                <div class="card card-body">
+                    <form form action="/usersubmission/upload/movetemp">
+                        <button class="btn btn-grn" type="submit">Senden</button>
+                        <input type="hidden" value="" name="hiddenid_form" id="hiddenid_form">
+                    </form>
+                </div>
+            </div>
+            <div class="collapse" id="collapseVideos">
+                <div class="card card-body">
+                    <form id="dropzoneTwo" class="dropzone">
+                        <div class="dz-message" data-dz-message style="margin: 0px;padding: 50px;">Video hier hineinziehen oder klicken
+                        </div>
+                        <input type="hidden" value="" id="hiddenid" name="hiddenid">
+                    </form>
+                </div>
+            </div>
+            <div class="collapse" id="collapseSubmitVideo">
+                <div class="card card-body">
+                    <form action="/usersubmission/upload/success">
+                        <button class="btn btn-grn" type="submit">Senden</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Hall of Fame -->
+<div class="modal fade" id="hofModal" tabindex="-1" role="dialog" aria-labelledby="hofModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-expanded" role="document">
+        <div class="modal-content">
+            <div class="modal-header site-title hof-header">
+                <h5>Hall of Fame<span>Top Uploaders </span> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                                                    <div class="row">
+                                                    
+                                                            <div class="col-md-4 col-lg-2" id="hallfame">
+                                    <div class="col-12 text-center hall_avatar"><img class="hall_avatar_img" src="/storage/users/default.png"></div>
+                                    <div class="col-12 text-center hall_name"><b><a href="/halloffame/viewall/155799">1: Funstyler</a></b></div>
+                                    <div class="col-12 text-center hall_counter">Uploads: 25</div>
+                                </div>
+                                                                                                                
+                                                            <div class="col-md-4 col-lg-2" id="hallfame">
+                                    <div class="col-12 text-center hall_avatar"><img class="hall_avatar_img" src="/storage/1566889656.jpg"></div>
+                                    <div class="col-12 text-center hall_name"><b><a href="/halloffame/viewall/100000065">2: Kemo</a></b></div>
+                                    <div class="col-12 text-center hall_counter">Uploads: 1</div>
+                                </div>
+                                                                                                        </div>
+                    <div class="row">
+                        <button class="btn btn-grn" onclick="btn_hof_link();" id="btn_hof"> View All </button>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function openModal() {
+        $("#upModal").modal('show');
+        return false;
+    }
+    function hallOfFameModal() {
+        $("#hofModal").modal('show');
+        return false;
+    }
+    function hideHallOfFameModal() {
+        $("#hofModal").modal('hide');
+        return false;
+    }
+    $("#imageButton").click(function(){
+        $("#videoButton").toggleClass("hidden");
+    });
+    $("#videoButton").click(function(){
+        $("#imageButton").toggleClass("hidden");
+    });
+
+        document.getElementById("btn_hof").onclick = function () {
+            location.href = "/halloffame/viewall";
+        };
+
+
+</script>
+<script type="text/javascript">
+
+    $('#search').on('keyup', function () {
+
+
+        $value = $(this).val();
+        if ($value != '') {
+            $.ajax({
+
+                type: 'get',
+
+                url: 'https://de.orschlurch.net/search',
+
+                data: {'search': $value},
+
+                success: function (data) {
+                    $('tbody').html(data);
+
+                }
+
+            });
+        } else {
+            $('tbody').html('');
+        }
+
+
+    })
+
+</script>
+
+<script type="text/javascript">
+
+    $.ajaxSetup({headers: {'csrftoken': 'q4x6QtMKbfB0wngWJDzXVcrPSjgvmbJQSWieUfHO'}});
+
+</script>
+<script>
+    (function (p, u, s, h, x) {
+        p.pushpad = p.pushpad || function () {
+            (p.pushpad.q = p.pushpad.q || []).push(arguments)
+        };
+        h = u.getElementsByTagName('head')[0];
+        x = u.createElement('script');
+        x.async = 1;
+        x.src = s;
+        h.appendChild(x);
+    })(window, document, 'https://pushpad.xyz/pushpad.js');
+
+    pushpad('init', 6567);
+
+    if (sessionStorage.getItem('notification-status') != 'subscribed')
+        pushpad('subscribe', function () {
+            sessionStorage.setItem('notification-status', 'subscribed');
+        });
+</script>
+
+<script>
+    function doALike(myId) {
+        //Like & Dislike Ajax Request
+        var token = 'q4x6QtMKbfB0wngWJDzXVcrPSjgvmbJQSWieUfHO';
+        var urlLike = 'https://de.orschlurch.net/like';
+        var postId = myId;
+
+        $.ajax({
+            method: 'POST',
+            url: urlLike,
+            data: {postId: postId, _token: token},
+            success: function (result) {
+                $("#like-" + myId).html("<i class=\"far fa-thumbs-up\"></i> " + result['likes']);
+            }
+        });
+        return false;
+    }
+
+</script>
+
+<div class="invDiv"><a href="#" onclick="return openModal();"></a></div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-2458428816320707",
+        enable_page_level_ads: true
+    });
+</script>
+</body>
+
+</html>
