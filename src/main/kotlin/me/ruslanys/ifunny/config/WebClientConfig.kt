@@ -26,25 +26,23 @@ class WebClientConfig(private val properties: GrabProperties) {
     }
 
     @Bean
-    fun webClient(): WebClient {
-        return WebClient.builder()
-                .codecs {
-                    it.defaultCodecs().maxInMemorySize(2 * 1024 * 1024)
-                }
-                .clientConnector(ReactorClientHttpConnector(resourceFactory()) { client ->
-                    client.tcpConfiguration { tcpClient ->
-                        tcpClient.doOnConnected { connection ->
-                            connection.addHandlerLast(ReadTimeoutHandler(10))
-                            connection.addHandlerLast(WriteTimeoutHandler(10))
-                        }
+    fun webClient(): WebClient = WebClient.builder()
+            .codecs {
+                it.defaultCodecs().maxInMemorySize(2 * 1024 * 1024)
+            }
+            .clientConnector(ReactorClientHttpConnector(resourceFactory()) { client ->
+                client.tcpConfiguration { tcpClient ->
+                    tcpClient.doOnConnected { connection ->
+                        connection.addHandlerLast(ReadTimeoutHandler(10))
+                        connection.addHandlerLast(WriteTimeoutHandler(10))
                     }
+                }
 
-                    client.secure()
-                    client.keepAlive(false)
-                    client.followRedirect(true)
-                })
-                .defaultHeader("User-Agent", properties.userAgent)
-                .build()
-    }
+                client.secure()
+                client.keepAlive(false)
+                client.followRedirect(true)
+            })
+            .defaultHeader("User-Agent", properties.userAgent)
+            .build()
 
 }
