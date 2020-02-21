@@ -1,5 +1,6 @@
 package me.ruslanys.ifunny.channel
 
+import me.ruslanys.ifunny.domain.Language
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.springframework.stereotype.Component
@@ -9,7 +10,7 @@ import java.util.*
 import java.util.regex.Pattern
 
 @Component
-class FuoriditestaImagesChannel : FuoriditestaChannel() {
+class FuoriditestaImagesChannel : Channel(Language.ITALIAN, "http://www.fuoriditesta.it") {
 
     override suspend fun pagePath(pageNumber: Int): String {
         return "$baseUrl/immagini-divertenti/index-$pageNumber.php"
