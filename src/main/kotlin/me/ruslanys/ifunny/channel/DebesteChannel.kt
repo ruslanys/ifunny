@@ -21,7 +21,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
 
         for (box in boxes) {
             // Skip boxes without content
-            if (box.select(".objectWrapper").isEmpty()) {
+            if (box.select("h2").isEmpty()) {
                 continue
             }
 
