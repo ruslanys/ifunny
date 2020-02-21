@@ -6,6 +6,8 @@ The format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.0.6] - 2020-02-21
 ### Added
 - Besti channel
 
@@ -67,7 +69,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitLab CI: Build job
 - GitLab CI: Package Docker image job
 
-[unreleased]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.5...master
+[unreleased]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.6...master
+[2.0.6]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.5...v2.0.6
 [2.0.5]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.4...v2.0.5
 [2.0.4]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.3...v2.0.4
 [2.0.3]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.2...v2.0.3
