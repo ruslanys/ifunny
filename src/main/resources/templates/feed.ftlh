@@ -49,8 +49,8 @@
                                             <option disabled>Language</option>
                                             <option value="de">German</option>
                                             <option value="fr">French</option>
+                                            <option value="it">Italian</option>
                                             <option value="es" disabled>Spanish</option>
-                                            <option value="it" disabled>Italian</option>
                                             <option value="pt" disabled>Portuguese</option>
                                             <option value="ru" disabled>Russian</option>
                                         </select>
