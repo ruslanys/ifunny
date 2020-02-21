@@ -77,7 +77,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitLab CI: Build job
 - GitLab CI: Package Docker image job
 
-[unreleased]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.7...master
+[unreleased]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.8...master
+[2.0.8]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.7...v2.0.8
 [2.0.7]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.6...v2.0.7
 [2.0.6]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.5...v2.0.6
 [2.0.5]: https://gitlab.com/ruslanys/ifunny/compare/v2.0.4...v2.0.5
