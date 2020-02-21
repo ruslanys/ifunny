@@ -82,7 +82,9 @@ class ResourceDownloader(
     }
 
     private fun generateFilename(memeInfo: MemeInfo): String {
-        val fileExtension = memeInfo.originUrl!!.substringAfterLast(".")
+        val fileExtension = memeInfo.originUrl!!
+                .substringAfterLast(".")
+                .substringBefore("?")
         return "${UUID.randomUUID()}.$fileExtension"
     }
 
