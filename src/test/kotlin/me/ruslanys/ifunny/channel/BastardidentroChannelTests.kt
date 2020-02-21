@@ -40,6 +40,23 @@ class BastardidentroChannelTests {
     }
 
     @Test
+    fun parsePageWithMemeWithoutHeader() {
+        val html = javaClass.getResourceAsStream("bastardidentro/page_without_header.html").bufferedReader().use {
+            it.readText()
+        }
+
+        // --
+        val page = channel.parsePage(761, html)
+        val list = page.memesInfo
+
+        // --
+        assertThat(page.hasNext).isTrue()
+        assertThat(list).hasSize(9)
+        assertThat(list).allMatch { it.pageUrl != null }
+        assertThat(list).allMatch { it.title != null }
+    }
+
+    @Test
     fun parseLastPageShouldReturnHasNextFalse() {
         val html = javaClass.getResourceAsStream("bastardidentro/page_last.html").bufferedReader().use {
             it.readText()

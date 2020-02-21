@@ -26,7 +26,7 @@ class BastardidentroChannel : Channel(Language.ITALIAN, "https://www.bastardiden
         val list = arrayListOf<MemeInfo>()
 
         for (box in boxes) {
-            val (url, title) = parseHeader(box)
+            val (url, title) = parseHeader(box) ?: continue
 
             // --
             val info = MemeInfo(pageUrl = url, title = title)
@@ -36,8 +36,8 @@ class BastardidentroChannel : Channel(Language.ITALIAN, "https://www.bastardiden
         return Page(pageNumber, isHasNext(document), list)
     }
 
-    private fun parseHeader(box: Element): Pair<String, String> {
-        val link = box.selectFirst(".views-field-title a")
+    private fun parseHeader(box: Element): Pair<String, String>? {
+        val link = box.selectFirst(".views-field-title a") ?: return null
         val url = link.absUrl("href")
         val decodedUrl = URLDecoder.decode(url, Charsets.UTF_8)
         val title = link.text()
