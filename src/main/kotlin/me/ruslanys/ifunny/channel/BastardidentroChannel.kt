@@ -15,7 +15,7 @@ class BastardidentroChannel : Channel(Language.ITALIAN, "https://www.bastardiden
         return if (pageNumber == 1) {
             "$baseUrl/immagini-e-vignette-divertenti"
         } else {
-            "https://www.bastardidentro.it/immagini-e-vignette-divertenti?page=${pageNumber - 1}"
+            "$baseUrl/immagini-e-vignette-divertenti?page=${pageNumber - 1}"
         }
     }
 
