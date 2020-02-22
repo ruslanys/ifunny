@@ -1,6 +1,7 @@
 package me.ruslanys.ifunny.channel
 
 import kotlinx.coroutines.runBlocking
+import me.ruslanys.ifunny.util.readResource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -23,10 +24,8 @@ class BastardidentroChannelTests {
     }
 
     @Test
-    fun parseProperPageShouldReturnList() {
-        val html = javaClass.getResourceAsStream("bastardidentro/page.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseProperPageShouldReturnList() = runBlocking<Unit> {
+        val html = readResource<BastardidentroChannelTests>("bastardidentro/page.html")
 
         // --
         val page = channel.parsePage(6, html)
@@ -40,10 +39,8 @@ class BastardidentroChannelTests {
     }
 
     @Test
-    fun parsePageWithMemeWithoutHeader() {
-        val html = javaClass.getResourceAsStream("bastardidentro/page_without_header.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parsePageWithMemeWithoutHeader() = runBlocking<Unit> {
+        val html = readResource<BastardidentroChannelTests>("bastardidentro/page_without_header.html")
 
         // --
         val page = channel.parsePage(761, html)
@@ -57,10 +54,8 @@ class BastardidentroChannelTests {
     }
 
     @Test
-    fun parseLastPageShouldReturnHasNextFalse() {
-        val html = javaClass.getResourceAsStream("bastardidentro/page_last.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseLastPageShouldReturnHasNextFalse() = runBlocking<Unit> {
+        val html = readResource<BastardidentroChannelTests>("bastardidentro/page_last.html")
 
         // --
         val page = channel.parsePage(1421, html)
@@ -70,21 +65,19 @@ class BastardidentroChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
+    fun parseInvalidPageShouldReturnEmptyList() = runBlocking {
         val page = channel.parsePage(1, "<html></html>")
         assertThat(page.hasNext).isFalse()
         assertThat(page.memesInfo).isEmpty()
     }
 
     @Test
-    fun parsePictureMeme() {
+    fun parsePictureMeme() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://www.bastardidentro.it/immagini-e-vignette-divertenti/inconveniente-nel-lavare-i-piatti-511606",
                 title = "Inconveniente nel lavare i piatti!"
         )
-        val html = javaClass.getResourceAsStream("bastardidentro/meme_picture.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<BastardidentroChannelTests>("bastardidentro/meme_picture.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)

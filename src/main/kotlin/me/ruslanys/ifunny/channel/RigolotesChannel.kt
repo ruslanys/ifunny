@@ -46,7 +46,7 @@ class RigolotesChannel(
 
     private fun pagesKey() = "${getName()}:pages"
 
-    override fun parsePage(pageNumber: Int, body: String): Page {
+    override suspend fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
         val boxes = document.select("div.articles-container > div.article-box")
 
@@ -109,7 +109,7 @@ class RigolotesChannel(
         return document.select("div.pagination-menu div.next-button a").text().contains("Suivant")
     }
 
-    override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
+    override suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
         val box = document.selectFirst(".article-box")
 

@@ -11,6 +11,7 @@ import me.ruslanys.ifunny.exception.NotFoundException
 import me.ruslanys.ifunny.service.MemeService
 import me.ruslanys.ifunny.util.createDummyFile
 import me.ruslanys.ifunny.util.createDummyMeme
+import me.ruslanys.ifunny.util.readResource
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
@@ -92,7 +93,7 @@ class FeedApiControllerTests : ControllerTests() {
         given(memeService.getPage(Language.GERMAN, pageRequest)).willReturn(PageImpl<Meme>(memes))
 
         // --
-        val json = FeedApiControllerTests::class.java.getResourceAsStream("feed_getPage.json").bufferedReader().use { it.readText() }
+        val json = readResource<FeedApiControllerTests>("feed_getPage.json")
 
         // --
         webClient.get()
@@ -133,7 +134,7 @@ class FeedApiControllerTests : ControllerTests() {
         val meme = createDummyMeme(id = ObjectId("5e107cc18b12145d4624f23c"))
         given(memeService.getById("321")).willReturn(meme)
 
-        val json = FeedApiControllerTests::class.java.getResourceAsStream("feed_getById.json").bufferedReader().use { it.readText() }
+        val json = readResource<FeedApiControllerTests>("feed_getById.json")
 
         webClient.get()
                 .uri("/api/feed/321")

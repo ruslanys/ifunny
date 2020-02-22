@@ -12,7 +12,7 @@ class FunpotChannel : Channel(Language.GERMAN, "https://funpot.net") {
 
     override suspend fun pagePath(pageNumber: Int): String = "$baseUrl/entdecken/lustiges/$pageNumber/"
 
-    override fun parsePage(pageNumber: Int, body: String): Page {
+    override suspend fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body)
         val boxes = document.getElementsByClass("contentline")
 
@@ -91,7 +91,7 @@ class FunpotChannel : Channel(Language.GERMAN, "https://funpot.net") {
         return document.select("a > img[src=https://funpot.net/includes/logos/pfeil_rechts.gif]").isNotEmpty()
     }
 
-    override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
+    override suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
         val container = document.getElementById("content")
 

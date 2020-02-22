@@ -19,7 +19,7 @@ class BastardidentroChannel : Channel(Language.ITALIAN, "https://www.bastardiden
         }
     }
 
-    override fun parsePage(pageNumber: Int, body: String): Page {
+    override suspend fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body).apply { setBaseUri(baseUrl) }
         val boxes = document.select("#block-system-main .view-content > div.views-row-odd, #block-system-main .view-content > div.views-row-even")
 
@@ -49,7 +49,7 @@ class BastardidentroChannel : Channel(Language.ITALIAN, "https://www.bastardiden
         return document.select(".pagination > .next").isNotEmpty()
     }
 
-    override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
+    override suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).apply { setBaseUri(baseUrl) }
 
         val publishedDateTime = parsePublishDateTime(document)

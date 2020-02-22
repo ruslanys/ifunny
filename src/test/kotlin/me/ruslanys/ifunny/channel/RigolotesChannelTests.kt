@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.mock
 import kotlinx.coroutines.runBlocking
 import me.ruslanys.ifunny.util.mockGet
+import me.ruslanys.ifunny.util.readResource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -61,10 +62,8 @@ class RigolotesChannelTests {
     }
 
     @Test
-    fun parseProperPageShouldReturnList() {
-        val html = javaClass.getResourceAsStream("rigolotes/page.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseProperPageShouldReturnList() = runBlocking<Unit> {
+        val html = readResource<RigolotesChannelTests>("rigolotes/page.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -82,10 +81,8 @@ class RigolotesChannelTests {
     }
 
     @Test
-    fun parsePageWithYoutubeShouldSkipVideo() {
-        val html = javaClass.getResourceAsStream("rigolotes/page_with_youtube.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parsePageWithYoutubeShouldSkipVideo() = runBlocking<Unit> {
+        val html = readResource<RigolotesChannelTests>("rigolotes/page_with_youtube.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -97,10 +94,8 @@ class RigolotesChannelTests {
     }
 
     @Test
-    fun parsePageWithVideo() {
-        val html = javaClass.getResourceAsStream("rigolotes/page_with_video.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parsePageWithVideo() = runBlocking<Unit> {
+        val html = readResource<RigolotesChannelTests>("rigolotes/page_with_video.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -111,10 +106,8 @@ class RigolotesChannelTests {
     }
 
     @Test
-    fun parseLastPageShouldReturnHasNextFalse() {
-        val html = javaClass.getResourceAsStream("rigolotes/page_last.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseLastPageShouldReturnHasNextFalse() = runBlocking<Unit> {
+        val html = readResource<RigolotesChannelTests>("rigolotes/page_last.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -124,17 +117,15 @@ class RigolotesChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
+    fun parseInvalidPageShouldReturnEmptyList() = runBlocking {
         val page = channel.parsePage(1, "<html></html>")
         assertThat(page.hasNext).isFalse()
         assertThat(page.memesInfo).isEmpty()
     }
 
     @Test
-    fun parsePageWithUpdatedUpvotes() {
-        val html = javaClass.getResourceAsStream("rigolotes/page_broken_upvotes.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parsePageWithUpdatedUpvotes() = runBlocking<Unit> {
+        val html = readResource<RigolotesChannelTests>("rigolotes/page_broken_upvotes.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -145,7 +136,7 @@ class RigolotesChannelTests {
     }
 
     @Test
-    fun parsePictureMeme() {
+    fun parsePictureMeme() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://rigolotes.fr/34696/hey-mec-t-es-juste-un-gros",
                 title = "Hey mec, t'es juste un gros....",
@@ -153,9 +144,7 @@ class RigolotesChannelTests {
                 publishDateTime = LocalDateTime.of(2020, 9, 1, 7, 24),
                 author = "margaux"
         )
-        val html = javaClass.getResourceAsStream("rigolotes/meme_picture.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<RigolotesChannelTests>("rigolotes/meme_picture.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)
@@ -171,10 +160,8 @@ class RigolotesChannelTests {
     }
 
     @Test
-    fun parseGifMeme() {
-        val html = javaClass.getResourceAsStream("rigolotes/meme_gif.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseGifMeme() = runBlocking<Unit> {
+        val html = readResource<RigolotesChannelTests>("rigolotes/meme_gif.html")
 
         // --
         val info = channel.parseMeme(MemeInfo(), html)
@@ -184,10 +171,8 @@ class RigolotesChannelTests {
     }
 
     @Test
-    fun parseVideoMeme() {
-        val html = javaClass.getResourceAsStream("rigolotes/meme_video.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseVideoMeme() = runBlocking<Unit> {
+        val html = readResource<RigolotesChannelTests>("rigolotes/meme_video.html")
 
         // --
         val info = channel.parseMeme(MemeInfo(), html)

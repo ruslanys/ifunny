@@ -18,7 +18,7 @@ class OrschlurchChannel : Channel(Language.GERMAN, "https://de.orschlurch.net") 
         }
     }
 
-    override fun parsePage(pageNumber: Int, body: String): Page {
+    override suspend fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
         val boxes = document.getElementsByClass("portfolio-item")
 
@@ -66,7 +66,7 @@ class OrschlurchChannel : Channel(Language.GERMAN, "https://de.orschlurch.net") 
         return document.select(".pagination").text().contains("›")
     }
 
-    override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
+    override suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
 
         // --
