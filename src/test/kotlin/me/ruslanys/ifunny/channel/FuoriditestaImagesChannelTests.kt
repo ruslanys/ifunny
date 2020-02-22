@@ -1,6 +1,7 @@
 package me.ruslanys.ifunny.channel
 
 import kotlinx.coroutines.runBlocking
+import me.ruslanys.ifunny.util.readResource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -23,10 +24,8 @@ class FuoriditestaImagesChannelTests {
     }
 
     @Test
-    fun parseProperPageShouldReturnList() {
-        val html = javaClass.getResourceAsStream("fuoriditesta-images/page.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseProperPageShouldReturnList() = runBlocking<Unit> {
+        val html = readResource<FuoriditestaImagesChannelTests>("fuoriditesta-images/page.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -41,10 +40,8 @@ class FuoriditestaImagesChannelTests {
     }
 
     @Test
-    fun parseLastPageShouldReturnHasNextFalse() {
-        val html = javaClass.getResourceAsStream("fuoriditesta-images/page_last.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseLastPageShouldReturnHasNextFalse() = runBlocking<Unit> {
+        val html = readResource<FuoriditestaImagesChannelTests>("fuoriditesta-images/page_last.html")
 
         // --
         val page = channel.parsePage(216, html)
@@ -54,22 +51,20 @@ class FuoriditestaImagesChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
+    fun parseInvalidPageShouldReturnEmptyList() = runBlocking {
         val page = channel.parsePage(1, "<html></html>")
         assertThat(page.hasNext).isFalse()
         assertThat(page.memesInfo).isEmpty()
     }
 
     @Test
-    fun parsePictureMeme() {
+    fun parsePictureMeme() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "http://www.fuoriditesta.it/immagini-divertenti/calzini-di-trump.html",
                 title = "Calzini di Trump",
                 publishDateTime = LocalDateTime.of(2019, 8, 26, 0, 0)
         )
-        val html = javaClass.getResourceAsStream("fuoriditesta-images/meme_picture.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<FuoriditestaImagesChannelTests>("fuoriditesta-images/meme_picture.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)

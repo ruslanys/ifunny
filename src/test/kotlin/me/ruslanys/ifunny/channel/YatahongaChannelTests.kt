@@ -2,6 +2,7 @@ package me.ruslanys.ifunny.channel
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.runBlocking
+import me.ruslanys.ifunny.util.readResource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -23,10 +24,8 @@ class YatahongaChannelTests {
     }
 
     @Test
-    fun parseProperPageShouldReturnList() {
-        val html = javaClass.getResourceAsStream("yatahonga/page.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseProperPageShouldReturnList() = runBlocking<Unit> {
+        val html = readResource<YatahongaChannelTests>("yatahonga/page.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -42,10 +41,8 @@ class YatahongaChannelTests {
     }
 
     @Test
-    fun parseLastPageShouldReturnHasNextFalse() {
-        val html = javaClass.getResourceAsStream("yatahonga/page_last.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseLastPageShouldReturnHasNextFalse() = runBlocking<Unit> {
+        val html = readResource<YatahongaChannelTests>("yatahonga/page_last.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -55,23 +52,21 @@ class YatahongaChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
+    fun parseInvalidPageShouldReturnEmptyList() = runBlocking {
         val page = channel.parsePage(1, "<html></html>")
         assertThat(page.hasNext).isFalse()
         assertThat(page.memesInfo).isEmpty()
     }
 
     @Test
-    fun parsePictureMeme() {
+    fun parsePictureMeme() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://www.yatahonga.com/actualites/768nq/",
                 title = "La grève SNCF commence à se voir",
                 likes = 223,
                 comments = 8
         )
-        val html = javaClass.getResourceAsStream("yatahonga/meme_picture.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<YatahongaChannelTests>("yatahonga/meme_picture.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)
@@ -88,16 +83,14 @@ class YatahongaChannelTests {
     }
 
     @Test
-    fun parseVideoMeme() {
+    fun parseVideoMeme() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://www.yatahonga.com/gif/c78nq/",
                 title = "Batman",
                 likes = 4,
                 comments = 2
         )
-        val html = javaClass.getResourceAsStream("yatahonga/meme_video.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<YatahongaChannelTests>("yatahonga/meme_video.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)

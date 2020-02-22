@@ -1,6 +1,7 @@
 package me.ruslanys.ifunny.channel
 
 import kotlinx.coroutines.runBlocking
+import me.ruslanys.ifunny.util.readResource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -23,10 +24,8 @@ class OrschlurchChannelTests {
     }
 
     @Test
-    fun parseProperPageShouldReturnList() {
-        val html = javaClass.getResourceAsStream("orschlurch/page.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseProperPageShouldReturnList() = runBlocking<Unit> {
+        val html = readResource<OrschlurchChannelTests>("orschlurch/page.html")
 
         // --
         val page = channel.parsePage(33, html)
@@ -42,10 +41,8 @@ class OrschlurchChannelTests {
     }
 
     @Test
-    fun parseLastPageShouldReturnHasNextFalse() {
-        val html = javaClass.getResourceAsStream("orschlurch/page_last.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseLastPageShouldReturnHasNextFalse() = runBlocking<Unit> {
+        val html = readResource<OrschlurchChannelTests>("orschlurch/page_last.html")
 
         // --
         val page = channel.parsePage(60, html)
@@ -55,23 +52,21 @@ class OrschlurchChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
+    fun parseInvalidPageShouldReturnEmptyList() = runBlocking {
         val page = channel.parsePage(1, "<html></html>")
         assertThat(page.hasNext).isFalse()
         assertThat(page.memesInfo).isEmpty()
     }
 
     @Test
-    fun parseVideoMeme() {
+    fun parseVideoMeme() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://de.orschlurch.net/post/der-etwas-andere-hochzeitskorso",
                 title = "Der etwas andere Hochzeitskorso",
                 likes = 1,
                 comments = 0
         )
-        val html = javaClass.getResourceAsStream("orschlurch/meme_video.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<OrschlurchChannelTests>("orschlurch/meme_video.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)

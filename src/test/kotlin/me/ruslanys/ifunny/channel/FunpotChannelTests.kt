@@ -1,6 +1,7 @@
 package me.ruslanys.ifunny.channel
 
 import kotlinx.coroutines.runBlocking
+import me.ruslanys.ifunny.util.readResource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -22,10 +23,8 @@ class FunpotChannelTests {
     }
 
     @Test
-    fun parseProperPageShouldReturnList() {
-        val html = javaClass.getResourceAsStream("funpot/page.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseProperPageShouldReturnList() = runBlocking<Unit> {
+        val html = readResource<FunpotChannelTests>("funpot/page.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -45,10 +44,8 @@ class FunpotChannelTests {
     }
 
     @Test
-    fun parseLastPageShouldReturnHasNextFalse() {
-        val html = javaClass.getResourceAsStream("funpot/page_last.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseLastPageShouldReturnHasNextFalse() = runBlocking<Unit> {
+        val html = readResource<FunpotChannelTests>("funpot/page_last.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -58,14 +55,14 @@ class FunpotChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
+    fun parseInvalidPageShouldReturnEmptyList() = runBlocking {
         val page = channel.parsePage(1, "<html></html>")
         assertThat(page.hasNext).isFalse()
         assertThat(page.memesInfo).isEmpty()
     }
 
     @Test
-    fun parsePictureMemeTest() {
+    fun parsePictureMemeTest() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://funpot.net/?id=funpot0000454125&tagid=55&dateityp=",
                 title = "Helmut Kohl kommt in die Hölle",
@@ -73,9 +70,7 @@ class FunpotChannelTests {
                 likes = 2,
                 author = "Fossy"
         )
-        val html = javaClass.getResourceAsStream("funpot/meme_picture.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<FunpotChannelTests>("funpot/meme_picture.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)
@@ -91,16 +86,14 @@ class FunpotChannelTests {
     }
 
     @Test
-    fun parseGifMemeTest() {
+    fun parseGifMemeTest() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://funpot.net/?id=funpot0000454131&tagid=55&dateityp=",
                 title = "Sportlich 291",
                 publishDateTime = LocalDateTime.of(2019, 12, 26, 20, 51),
                 likes = 0
         )
-        val html = javaClass.getResourceAsStream("funpot/meme_gif.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<FunpotChannelTests>("funpot/meme_gif.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)
@@ -116,7 +109,7 @@ class FunpotChannelTests {
     }
 
     @Test
-    fun parseVideoMemeWithDirectLinkTest() {
+    fun parseVideoMemeWithDirectLinkTest() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://funpot.net/?id=funpot0000454085&tagid=55&dateityp=",
                 title = "Wo ist er?",
@@ -124,9 +117,7 @@ class FunpotChannelTests {
                 likes = 2,
                 author = "Oweiowei"
         )
-        val html = javaClass.getResourceAsStream("funpot/meme_video_Direct.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<FunpotChannelTests>("funpot/meme_video_Direct.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)
@@ -142,7 +133,7 @@ class FunpotChannelTests {
     }
 
     @Test
-    fun parseVideoMemeWithoutDirectLinkTest() {
+    fun parseVideoMemeWithoutDirectLinkTest() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://funpot.net/?id=funpot0000455173&tagid=55&dateityp=#",
                 title = "The Grüninen Profekt",
@@ -150,9 +141,7 @@ class FunpotChannelTests {
                 likes = 0,
                 author = "Carlos"
         )
-        val html = javaClass.getResourceAsStream("funpot/meme_video.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<FunpotChannelTests>("funpot/meme_video.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)

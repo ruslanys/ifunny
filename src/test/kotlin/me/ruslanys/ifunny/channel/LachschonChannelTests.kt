@@ -1,6 +1,7 @@
 package me.ruslanys.ifunny.channel
 
 import kotlinx.coroutines.runBlocking
+import me.ruslanys.ifunny.util.readResource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -22,10 +23,8 @@ class LachschonChannelTests {
     }
 
     @Test
-    fun parseProperPageShouldReturnList() {
-        val html = javaClass.getResourceAsStream("lachschon/page.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseProperPageShouldReturnList() = runBlocking<Unit> {
+        val html = readResource<LachschonChannelTests>("lachschon/page.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -42,10 +41,8 @@ class LachschonChannelTests {
     }
 
     @Test
-    fun parseLastPageShouldReturnHasNextFalse() {
-        val html = javaClass.getResourceAsStream("lachschon/page_last.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseLastPageShouldReturnHasNextFalse() = runBlocking<Unit> {
+        val html = readResource<LachschonChannelTests>("lachschon/page_last.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -55,14 +52,14 @@ class LachschonChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
+    fun parseInvalidPageShouldReturnEmptyList() = runBlocking {
         val page = channel.parsePage(1, "<html></html>")
         assertThat(page.hasNext).isFalse()
         assertThat(page.memesInfo).isEmpty()
     }
 
     @Test
-    fun parsePictureMeme() {
+    fun parsePictureMeme() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "https://www.lachschon.de/item/226337-Fastrichtig/",
                 title = "Fast richtig",
@@ -70,9 +67,7 @@ class LachschonChannelTests {
                 likes = 0,
                 comments = 12
         )
-        val html = javaClass.getResourceAsStream("lachschon/meme.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<LachschonChannelTests>("lachschon/meme.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)

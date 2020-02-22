@@ -1,6 +1,7 @@
 package me.ruslanys.ifunny.channel
 
 import kotlinx.coroutines.runBlocking
+import me.ruslanys.ifunny.util.readResource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -22,10 +23,8 @@ class DebesteChannelTests {
     }
 
     @Test
-    fun parseProperPageShouldReturnList() {
-        val html = javaClass.getResourceAsStream("debeste/page.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseProperPageShouldReturnList() = runBlocking<Unit> {
+        val html = readResource<DebesteChannelTests>("debeste/page.html")
 
         // --
         val page = channel.parsePage(5, html)
@@ -41,10 +40,8 @@ class DebesteChannelTests {
     }
 
     @Test
-    fun parseLastPageShouldReturnHasNextFalse() {
-        val html = javaClass.getResourceAsStream("debeste/page_last.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseLastPageShouldReturnHasNextFalse() = runBlocking<Unit> {
+        val html = readResource<DebesteChannelTests>("debeste/page_last.html")
 
         // --
         val page = channel.parsePage(1, html)
@@ -54,23 +51,21 @@ class DebesteChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
+    fun parseInvalidPageShouldReturnEmptyList() = runBlocking {
         val page = channel.parsePage(1, "<html></html>")
         assertThat(page.hasNext).isFalse()
         assertThat(page.memesInfo).isEmpty()
     }
 
     @Test
-    fun parsePictureMemeWithAuthorAndDate() {
+    fun parsePictureMemeWithAuthorAndDate() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 pageUrl = "http://debeste.de/109224/M-nner-Vor-dem-Rasieren-Nach-dem-Rasieren",
                 title = "Männer... Vor dem Rasieren... Nach dem Rasieren..",
                 likes = 24,
                 comments = 0
         )
-        val html = javaClass.getResourceAsStream("debeste/meme_picture_AuthorDate.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<DebesteChannelTests>("debeste/meme_picture_AuthorDate.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)
@@ -87,16 +82,14 @@ class DebesteChannelTests {
     }
 
     @Test
-    fun parsePictureMemeWithAuthor() {
+    fun parsePictureMemeWithAuthor() = runBlocking {
         val baseInfo = MemeInfo(
                 pageUrl = "http://debeste.de/91020/Jahrelang-haben-wir-uns-ber-diejenigen-lustig-gemacht",
                 title = "Jahrelang haben wir uns über diejenigen lustig gemacht..",
                 likes = 93,
                 comments = 0
         )
-        val html = javaClass.getResourceAsStream("debeste/meme_picture_Author.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<DebesteChannelTests>("debeste/meme_picture_Author.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)
@@ -114,16 +107,14 @@ class DebesteChannelTests {
     }
 
     @Test
-    fun parseGifMemeWithDate() {
+    fun parseGifMemeWithDate() = runBlocking {
         val baseInfo = MemeInfo(
                 pageUrl = "http://debeste.de/108960/Besonderer-Weihnachtsbaum",
                 title = "Besonderer Weihnachtsbaum..",
                 likes = 60,
                 comments = 0
         )
-        val html = javaClass.getResourceAsStream("debeste/meme_gif_Date.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<DebesteChannelTests>("debeste/meme_gif_Date.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)
@@ -141,16 +132,14 @@ class DebesteChannelTests {
     }
 
     @Test
-    fun parseVideoMemeWithComments() {
+    fun parseVideoMemeWithComments() = runBlocking {
         val baseInfo = MemeInfo(
                 pageUrl = "http://debeste.de/104767/Gibt-es-sofort-zu-Welcher-von-euch-war-es",
                 title = "Gibt es sofort zu! Welcher von euch war es?",
                 likes = 37,
                 comments = 2
         )
-        val html = javaClass.getResourceAsStream("debeste/meme_video_Comments.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<DebesteChannelTests>("debeste/meme_video_Comments.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)

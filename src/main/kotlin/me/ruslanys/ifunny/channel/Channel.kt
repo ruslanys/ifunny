@@ -26,12 +26,12 @@ abstract class Channel(val language: Language, val baseUrl: String) {
     /**
      * The method gets Page body and returns grabbed memes list.
      */
-    abstract fun parsePage(pageNumber: Int, body: String): Page
+    abstract suspend fun parsePage(pageNumber: Int, body: String): Page
 
     /**
      * The method gets meme individual page and returns extended information.
      */
-    abstract fun parseMeme(info: MemeInfo, body: String): MemeInfo
+    abstract suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo
 
     fun getName(): String = javaClass.simpleName
 

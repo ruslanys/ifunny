@@ -13,7 +13,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
 
     override suspend fun pagePath(pageNumber: Int): String = "$baseUrl/$pageNumber"
 
-    override fun parsePage(pageNumber: Int, body: String): Page {
+    override suspend fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body)
         val boxes = document.select(".box")
 
@@ -82,7 +82,7 @@ class DebesteChannel : Channel(Language.GERMAN, "http://debeste.de") {
         return document.select("li.next").firstOrNull()?.hasClass("disabled") == false
     }
 
-    override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
+    override suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
         val box = document.selectFirst(".box")
 

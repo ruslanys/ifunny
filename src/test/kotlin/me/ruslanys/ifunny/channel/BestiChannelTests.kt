@@ -1,6 +1,7 @@
 package me.ruslanys.ifunny.channel
 
 import kotlinx.coroutines.runBlocking
+import me.ruslanys.ifunny.util.readResource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
@@ -23,10 +24,8 @@ class BestiChannelTests {
     }
 
     @Test
-    fun parseProperPageShouldReturnList() {
-        val html = javaClass.getResourceAsStream("besti/page.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseProperPageShouldReturnList() = runBlocking<Unit> {
+        val html = readResource<BestiChannelTests>("besti/page.html")
 
         // --
         val page = channel.parsePage(2, html)
@@ -44,10 +43,8 @@ class BestiChannelTests {
     }
 
     @Test
-    fun parseLastPageShouldReturnHasNextFalse() {
-        val html = javaClass.getResourceAsStream("besti/page_last.html").bufferedReader().use {
-            it.readText()
-        }
+    fun parseLastPageShouldReturnHasNextFalse() = runBlocking<Unit> {
+        val html = readResource<BestiChannelTests>("besti/page_last.html")
 
         // --
         val page = channel.parsePage(6590, html)
@@ -57,14 +54,14 @@ class BestiChannelTests {
     }
 
     @Test
-    fun parseInvalidPageShouldReturnEmptyList() {
+    fun parseInvalidPageShouldReturnEmptyList() = runBlocking {
         val page = channel.parsePage(1, "<html></html>")
         assertThat(page.hasNext).isFalse()
         assertThat(page.memesInfo).isEmpty()
     }
 
     @Test
-    fun parsePictureMeme() {
+    fun parsePictureMeme() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 "https://besti.it/74854/Io-alla-prova-costume-di-carnevale",
                 null,
@@ -74,9 +71,7 @@ class BestiChannelTests {
                 0,
                 "GiorgiaPi"
         )
-        val html = javaClass.getResourceAsStream("besti/meme_picture.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<BestiChannelTests>("besti/meme_picture.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)
@@ -93,7 +88,7 @@ class BestiChannelTests {
     }
 
     @Test
-    fun parseVideoMeme() {
+    fun parseVideoMeme() = runBlocking<Unit> {
         val baseInfo = MemeInfo(
                 "https://besti.it/74846/succede",
                 null,
@@ -103,9 +98,7 @@ class BestiChannelTests {
                 1,
                 "AronF"
         )
-        val html = javaClass.getResourceAsStream("besti/meme_video.html").bufferedReader().use {
-            it.readText()
-        }
+        val html = readResource<BestiChannelTests>("besti/meme_video.html")
 
         // --
         val info = channel.parseMeme(baseInfo, html)

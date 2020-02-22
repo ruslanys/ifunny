@@ -14,7 +14,7 @@ class LachschonChannel : Channel(Language.GERMAN, "https://www.lachschon.de") {
         return "$baseUrl/?set_gallery_type=image&page=$pageNumber"
     }
 
-    override fun parsePage(pageNumber: Int, body: String): Page {
+    override suspend fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
         val boxes = document.select("#itemlist > li")
 
@@ -65,7 +65,7 @@ class LachschonChannel : Channel(Language.GERMAN, "https://www.lachschon.de") {
         return document.select("a.forward").isNotEmpty()
     }
 
-    override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
+    override suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).also { it.setBaseUri(baseUrl) }
         val box = document.getElementById("main_content")
 

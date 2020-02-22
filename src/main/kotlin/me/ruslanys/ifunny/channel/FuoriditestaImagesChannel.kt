@@ -16,7 +16,7 @@ class FuoriditestaImagesChannel : Channel(Language.ITALIAN, "http://www.fuoridit
         return "$baseUrl/immagini-divertenti/index-$pageNumber.php"
     }
 
-    override fun parsePage(pageNumber: Int, body: String): Page {
+    override suspend fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body).apply { setBaseUri(baseUrl) }
         val boxes = document.select(".homeimmagini > .immaginidiv")
 
@@ -58,7 +58,7 @@ class FuoriditestaImagesChannel : Channel(Language.ITALIAN, "http://www.fuoridit
         return document.select(".pagbloc").text().contains("»")
     }
 
-    override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
+    override suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).apply { setBaseUri(baseUrl) }
 
         val resourceUrl = parsePictureUrl(document)

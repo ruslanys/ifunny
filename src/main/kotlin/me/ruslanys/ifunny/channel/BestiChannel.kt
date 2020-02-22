@@ -15,7 +15,7 @@ class BestiChannel : Channel(Language.ITALIAN, "https://besti.it") {
         return "$baseUrl/$pageNumber"
     }
 
-    override fun parsePage(pageNumber: Int, body: String): Page {
+    override suspend fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body).apply { setBaseUri(baseUrl) }
         val boxes = document.select(".box")
 
@@ -93,7 +93,7 @@ class BestiChannel : Channel(Language.ITALIAN, "https://besti.it") {
         return document.select("li.next").firstOrNull()?.hasClass("disabled") == false
     }
 
-    override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
+    override suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body).apply { setBaseUri(baseUrl) }
 
         val pictureUrl = parsePictureUrl(document)

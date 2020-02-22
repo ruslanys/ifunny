@@ -20,7 +20,7 @@ class YatahongaChannel(private val objectMapper: ObjectMapper) : Channel(Languag
         }
     }
 
-    override fun parsePage(pageNumber: Int, body: String): Page {
+    override suspend fun parsePage(pageNumber: Int, body: String): Page {
         val document = Jsoup.parse(body)
         val articles = document.getElementsByTag("article")
 
@@ -66,7 +66,7 @@ class YatahongaChannel(private val objectMapper: ObjectMapper) : Channel(Languag
         return document.select("div.pagingbuttons > a.next").isNotEmpty()
     }
 
-    override fun parseMeme(info: MemeInfo, body: String): MemeInfo {
+    override suspend fun parseMeme(info: MemeInfo, body: String): MemeInfo {
         val document = Jsoup.parse(body)
         val json = document.selectFirst("script[type=application/ld+json]").data()
 
