@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.1] - 2020-02-27
+### Security
+- Spring Boot upgrade to 2.2.5
+
 ## [2.4.0] - 2020-02-22
 ### Added
 - Fuoriditesta images channel
@@ -85,7 +89,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitLab CI: Build job
 - GitLab CI: Package Docker image job
 
-[unreleased]: https://gitlab.com/ruslanys/ifunny/compare/v2.4.0...master
+[unreleased]: https://gitlab.com/ruslanys/ifunny/compare/v2.4.1...master
+[2.4.1]: https://gitlab.com/ruslanys/ifunny/compare/v2.4.0...v2.4.1
 [2.4.0]: https://gitlab.com/ruslanys/ifunny/compare/v2.3.1...v2.4.0
 [2.3.1]: https://gitlab.com/ruslanys/ifunny/compare/v2.3.0...v2.3.1
 [2.3.0]: https://gitlab.com/ruslanys/ifunny/compare/v2.2.0...v2.3.0
